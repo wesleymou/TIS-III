@@ -5,10 +5,10 @@ import logger from 'morgan';
 import exphbs from 'express-handlebars';
 import dotenv from 'dotenv';
 
-import indexRouter from './routes/index';
-import { RequestParamHandler } from 'express-serve-static-core';
-
 dotenv.config();
+
+import indexRouter from './routes/index';
+import productsRouter from './routes/products';
 
 const app = express();
 
@@ -22,6 +22,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/products', productsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
