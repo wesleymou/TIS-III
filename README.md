@@ -36,10 +36,12 @@ e preencha as variaveis de ambiente de acordo com as configurações do seu ambi
 
 #### Executando em modo desenvolvimento
 
-Execute o script de desenvolvimento
+Execute o script de desenvolvimento.
 
 `npm run dev`
 
+Abra o navegador na url local com a porta configurada na variável `PORT` do arquivo .env (*e.g.* http://localhost:4000).
+
 #### Enviando as alterações
 
-Faça um pull request para a branch `desenvolvimento`
+Faça um pull request para a branch `desenvolvimento`.
