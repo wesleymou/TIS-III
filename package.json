@@ -1,0 +1,52 @@
+{
+  "name": "figaro",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rimraf build/*",
+    "copy-assets": "ts-node tools/copyAssets",
+    "tsc": "tsc",
+    "build": "npm-run-all clean tsc copy-assets",
+    "dev:start": "npm-run-all build start",
+    "dev": "nodemon --watch src -e ts,ejs --exec npm run dev:start",
+    "start": "node build/index",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://rafaelbotazini@github.com/rafaelbotazini/figaro.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rafaelbotazini/figaro/issues"
+  },
+  "homepage": "https://github.com/rafaelbotazini/figaro#readme",
+  "dependencies": {
+    "dotenv": "^8.1.0",
+    "express": "^4.17.1",
+    "express-handlebars": "^3.1.0",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1",
+    "mysql": "^2.17.1"
+  },
+  "devDependencies": {
+    "@types/dotenv": "^6.1.1",
+    "@types/express": "^4.17.1",
+    "@types/express-handlebars": "0.0.33",
+    "@types/fs-extra": "^8.0.0",
+    "@types/http-errors": "^1.6.2",
+    "@types/morgan": "^1.7.37",
+    "@types/mysql": "^2.15.7",
+    "@types/shelljs": "^0.8.5",
+    "fs-extra": "^8.1.0",
+    "nodemon": "^1.19.2",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^3.0.0",
+    "shelljs": "^0.8.3",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.6.2"
+  }
+}
