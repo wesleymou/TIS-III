@@ -1,39 +1,43 @@
 import Product from "../models/Product";
-import conn from './Database'
+import Database from './Database'
 import CrudAsync from "../models/CrudAsync";
+import conn from './Database'
 
 class ProductService implements CrudAsync<Product> {
-
     createAsync(product: Product): Promise<void> {
-        return new Promise((resolve: Function, reject: Function) => {
-            conn
-                .query(
-                    `insert into products (
-                        code, name, description, 
-                        price, datecreated, expirationdate, 
-                        quantityavailable)
-                    values (?, ?, ?, ?, ?, ?);`,
-                    product)
-                .on('end', () => resolve())
-                .on('error', err => reject(err));
-        });
+        throw new Error("Method not implemented.");
     }
 
     getByIdAsync(id: number): Promise<Product> {
-        return new Promise((resolve: Function, reject: Function) => {
-            conn.query(`select * from products where id = ?`, id)
-                .on('result', (row: Product) => resolve(row))
-                .on('error', err => reject(err));
-        });
+        throw new Error("Method not implemented.");
+    }
+
+    getPageAsync(page: number): Promise<Product[]> {
+        throw new Error("Method not implemented.");
     }
 
     getAllAsync(): Promise<Product[]> {
         return new Promise((resolve: Function, reject: Function) => {
-            conn.query(`select * from products`, (err:Error, results: Product[]) => {
-                if (err) {
-                    reject(err);
+            conn.query(`select * from product`, (err: Error, results: any[]) => {
+                if (!err) {
+                    const products = new Array<Product>();
+
+                    for (const row of results) {
+                        products.push({
+                            id: row['id'],
+                            code: row['code'],
+                            dateCreated: row['date_created'],
+                            expirationDate: row['date_expires'],
+                            description: row['description'],
+                            name: row['name'],
+                            price: row['price'],
+                            quantityAvailable: row['quantity']
+                        });
+                    }
+
+                    resolve(products)
                 } else {
-                    resolve(results)
+                    reject(err);
                 }
             });
         });
