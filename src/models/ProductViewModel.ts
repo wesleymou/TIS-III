@@ -1,19 +1,22 @@
 import Product from "./Product";
-import NumberUtil from "../utils/NumberUtil";
 import DateTimeUtil from "../utils/DateTimeUtil";
+import NumberUtil from "../utils/NumberUtil";
 
-class ProductViewModel extends Product {
-    priceFormat: string;
-    dateCreatedFormat: string;
-    expirationDateFormat: string;
+type ProductViewModel = Product | {
+  priceFormat: string;
+  dateCreatedFormat: string;
+  expirationDateFormat: string;
+};
 
-    constructor(product: Product) {
-        super();
-        Object.assign(this, product);
-        this.priceFormat = NumberUtil.formatMoney(product.price);
-        this.dateCreatedFormat = DateTimeUtil.formatDateTime(product.dateCreated);
-        this.expirationDateFormat = DateTimeUtil.formatDate(product.expirationDate);
-    }
+function createViewModel(product: Product): ProductViewModel {
+  let viewModel: ProductViewModel = {
+    ...product,
+    priceFormat: NumberUtil.formatMoney(product.price),
+    dateCreatedFormat: DateTimeUtil.formatDateTime(product.dateCreated),
+    expirationDateFormat: DateTimeUtil.formatDate(product.expirationDate),
+  };
+  return viewModel;
 }
 
+export { createViewModel };
 export default ProductViewModel;
