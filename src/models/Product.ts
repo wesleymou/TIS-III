@@ -4,9 +4,9 @@ class Product {
     name: string = '';
     description: string = '';
     price: number = 0;
-    dateCreated: Date = new Date();
-    expirationDate: Date = new Date();
     quantityAvailable: number = 0;
-}
+    dateCreated?: Date;
+    expirationDate?: Date;
+};
 
 export default Product;
