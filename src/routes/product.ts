@@ -9,7 +9,11 @@ const router = Router();
 
 router.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const products: Product[] = await service.getAllAsync();
+    const query: string | undefined = req.query.q;
+
+    const products: Product[] = query
+      ? await service.searchAsync(query)
+      : await service.getAllAsync();
 
     const viewModel = new ProductListViewModel(products);
 
