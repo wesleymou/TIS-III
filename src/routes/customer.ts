@@ -6,6 +6,17 @@ import Customer from '../models/Customer';
 const service = new CustomerService();
 const router = Router();
 
+router.get('/', async (req, res, next) => {
+    try {
+        const customers = await service.getAllAsync();
+
+        res.json(customers);
+
+    } catch (err) {
+        next(createError(500, err));
+    }
+});
+
 router.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const customer = validateCustomerFromRequestBody(req.body);
