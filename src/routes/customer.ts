@@ -8,7 +8,11 @@ const router = Router();
 
 router.get('/', async (req, res, next) => {
     try {
-        const customers = await service.getAllAsync();
+        const query: string | undefined = req.query.q;
+
+        const customers = query
+            ? await service.searchAsync(query)
+            : await service.getAllAsync();
 
         res.json(customers);
 

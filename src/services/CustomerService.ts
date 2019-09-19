@@ -23,9 +23,11 @@ class CustomerService implements CrudAsync<Customer> {
   getByIdAsync(id: number): Promise<Customer> {
     throw new Error("Method not implemented.");
   }
+
   getPageAsync(page: number): Promise<Customer[]> {
     throw new Error("Method not implemented.");
   }
+
   getAllAsync(): Promise<Customer[]> {
     const sql = 'select * from customer';
 
@@ -33,7 +35,6 @@ class CustomerService implements CrudAsync<Customer> {
       Database.query(sql, (err: Error, results: any[]) => {
         if (!err) {
           const customers = results.map(mapRowToCustomer);
-          console.log(customers)
           resolve(customers);
         } else {
           reject(err);
@@ -41,6 +42,23 @@ class CustomerService implements CrudAsync<Customer> {
       });
     });
   }
+
+  searchAsync(query: string): Promise<Customer[]> {
+    const escaped = Database.escape('%' + query + '%');
+    const sql = `select * from customer where fullname like ${escaped} or nickname like ${escaped};`
+
+    return new Promise((resolve: Function, reject: Function) => {
+      Database.query(sql, (err: Error, results: any[]) => {
+        if (!err) {
+          const customers = results.map(mapRowToCustomer);
+          resolve(customers);
+        } else {
+          reject(err);
+        }
+      });
+    });
+  }
+
   updateAsync(update: Customer): Promise<void> {
     throw new Error("Method not implemented.");
   }
