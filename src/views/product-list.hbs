@@ -1,12 +1,13 @@
 <style>
     table {
-       border-collapse: collapse;
-       border: 1px solid #ddd;
-       border-radius: 6px;
-       box-shadow: 2px 2px 2px rgba(0,0,0,0.1);
+        border-collapse: collapse;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
     }
 
-    th, td {
+    th,
+    td {
         text-align: start;
         padding: 8px;
     }
@@ -30,9 +31,9 @@
     <tbody>
         {{#each products}}
         <tr>
-            <td><strong>{{product.id}}</strong></td>
-            <td>{{product.name}}</td>
-            <td>{{priceMoney}}</td>
+            <td><strong>{{id}}</strong></td>
+            <td>{{name}}</td>
+            <td>{{priceFormat}}</td>
         </tr>
         {{/each}}
     </tbody>

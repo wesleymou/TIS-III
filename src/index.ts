@@ -1,3 +1,8 @@
+import IntlPolyfill from 'intl';
+
+Intl.NumberFormat = IntlPolyfill.NumberFormat;
+Intl.DateTimeFormat = IntlPolyfill.DateTimeFormat;
+
 import createError, { HttpError } from 'http-errors';
 import express, { Request, Response } from 'express';
 import path from 'path';
@@ -8,7 +13,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import indexRouter from './routes/index';
-import productsRouter from './routes/products';
+import productRouter from './routes/product';
 
 const app = express();
 
@@ -22,7 +27,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/products', productsRouter);
+app.use('/product', productRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
