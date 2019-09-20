@@ -1,0 +1,119 @@
+<section class="mt-3">
+    <div class="container">
+        <h1>Clientes</h1>
+        <p class="text-secondary">Lista de clientes cadastrados no sistema</p>
+    </div>
+</section>
+
+<section class="my-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-9 col-lg-3">
+                <div class="input-group">
+                    <input id="query-input" name="query-input" type="text" class="form-control"
+                        placeholder="Pesquisar...">
+                    <div class="input-group-append">
+                        <button id="btn-search" class="btn btn-primary">
+                            <span class="oi oi-magnifying-glass"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-success" title="Cadastrar cliente" data-toggle="modal"
+                    data-target="#modal-create-customer">Adicionar</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="my-5">
+    <div class="container">
+        <table class="table" id="tabelaClientes">
+            <thead class="thead-light">
+                <tr>
+                    <th>Nome</th>
+                    <th>Apelido</th>
+                    <th>Telefone</th>
+                    <th>E-mail</th>
+                    <th>Endereço</th>
+                    <th>Data cadastro</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each customers}}
+                <tr>
+                    <td>{{fullName}}</td>
+                    <td>{{nickname}}</td>
+                    <td>{{phone}}</td>
+                    <td>{{email}}</td>
+                    <td>{{address}}</td>
+                    <td>{{dateCreatedFormat}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<div class="modal modal-fade" id="modal-create-customer">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h2>Cadastrar cliente</h2>
+                <p class="text-secondary">
+                    Insira as informações do novo cliente e clique em Enviar
+                </p>
+                <form class="my-3">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="nicknameFormInput">Apelido</label>
+                                <input type="text" class="form-control" id="nicknameFormInput" placeholder="Fulano">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="nameFormInput">Nome Completo</label>
+                                <input type="text" class="form-control" id="nameFormInput"
+                                    placeholder="Beltrano da Silva">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="emailFormInput">Endereço de email</label>
+                                <input type="email" class="form-control" id="emailFormInput"
+                                    placeholder="nome@exemplo.com">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="phoneFormInput">Telefone</label>
+                                <input type="tel" class="form-control" id="phoneFormInput"
+                                    placeholder="(xx) x xxxx-xxxx" pattern="[\d]{2}[\d]{8,9}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="addressFormInput">Endereço</label>
+                                <input type="text" class="form-control" id="addressFormInput"
+                                    placeholder="Rua dos Bobos,n 0, Bairro Cafundós">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn mr-2 text-primary">Cancelar</button>
+                <button type="button" id="btn-create" class="btn btn-success">Enviar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script async defer src="/js/customer.js"></script>

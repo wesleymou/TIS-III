@@ -1,51 +1,82 @@
-import Product from "../models/Product";
-import conn from './Database'
-import CrudAsync from "../models/CrudAsync";
+import Product from '../models/Product';
+import Database from './Database'
+import CrudAsync from '../models/CrudAsync';
 
 class ProductService implements CrudAsync<Product> {
+  createAsync(product: Product): Promise<void> {
+    return new Promise((resolve: Function, reject: Function) => {
+      Database.query(
+        `insert into product (name, code, description, price, date_expires, quantity)
+         values (?, ?, ?, ?, ?, ?)`, [
+        product.name,
+        product.code,
+        product.description,
+        product.price,
+        product.expirationDate,
+        product.quantityAvailable
+      ])
+        .on('error', err => reject(err))
+        .on('end', () => resolve())
+    });
+  }
 
-    createAsync(product: Product): Promise<void> {
-        return new Promise((resolve: Function, reject: Function) => {
-            conn
-                .query(
-                    `insert into products (
-                        code, name, description, 
-                        price, datecreated, expirationdate, 
-                        quantityavailable)
-                    values (?, ?, ?, ?, ?, ?);`,
-                    product)
-                .on('end', () => resolve())
-                .on('error', err => reject(err));
-        });
-    }
+  getByIdAsync(id: number): Promise<Product> {
+    throw new Error('Method not implemented.');
+  }
 
-    getByIdAsync(id: number): Promise<Product> {
-        return new Promise((resolve: Function, reject: Function) => {
-            conn.query(`select * from products where id = ?`, id)
-                .on('result', (row: Product) => resolve(row))
-                .on('error', err => reject(err));
-        });
-    }
+  getPageAsync(page: number): Promise<Product[]> {
+    throw new Error('Method not implemented.');
+  }
 
-    getAllAsync(): Promise<Product[]> {
-        return new Promise((resolve: Function, reject: Function) => {
-            conn.query(`select * from products`, (err:Error, results: Product[]) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(results)
-                }
-            });
-        });
-    }
+  getAllAsync(): Promise<Product[]> {
+    return new Promise((resolve: Function, reject: Function) => {
+      Database.query(`select * from product`, (err: Error, results: any[]) => {
+        if (!err) {
+          const products = results.map(mapRowToProduct);
+          resolve(products)
+        } else {
+          reject(err);
+        }
+      });
+    });
+  }
 
-    updateAsync(update: Product): Promise<void> {
-        throw new Error("Method not implemented.");
-    }
+  searchAsync(query: string): Promise<Product[]> {
+    return new Promise((resolve: Function, reject: Function) => {
+      const escaped = Database.escape('%' + query + '%');
+      const sql = `select * from product where name like ${escaped};`
 
-    removeAsync(id: number): Promise<void> {
-        throw new Error("Method not implemented.");
-    }
+      Database.query(sql, query, (err: Error | null, results: any[]) => {
+        if (!err) {
+          const products = results.map(mapRowToProduct);
+          resolve(products);
+        } else {
+          reject(err);
+        }
+      });
+    });
+  }
+
+  updateAsync(update: Product): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+
+  removeAsync(id: number): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+}
+
+function mapRowToProduct(row: any): Product {
+  return {
+    id: row['id'] || 0,
+    code: row['code'] || '',
+    dateCreated: row['date_created'],
+    expirationDate: row['date_expires'],
+    description: row['description'] || '',
+    name: row['name'] || '',
+    price: row['price'] || 0,
+    quantityAvailable: row['quantity'] || 0
+  }
 }
 
 export default ProductService;
