@@ -5,35 +5,124 @@
     </div>
 </section>
 
-<div class="section mx-5">
+<section class="my-5">
     <div class="container">
         <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <table class="table" id="tabelaProdutos">
-                        <thead class="thead-light">
-                            <tr>
-                                <th>#</th>
-                                <th>Nome</th>
-                                <th>Preço</th>
-                                <th>Data de validade</th>
-                                <th>Quant.</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {{#each products}}
-                            <tr>
-                                <th scope="row"><a href="/products/{{id}}">{{id}}</a></th>
-                                <td>{{name}}</td>
-                                <td>{{priceFormat}}</td>
-                                <td>{{expirationDateFormat}}</td>
-                                <td>{{quantityAvailable}}</td>
-                            </tr>
-                            {{/each }}
-                        </tbody>
-                    </table>
+            <div class="col-9 col-lg-3">
+                <div class="input-group">
+                    <input id="query-input" name="query-input" type="text" class="form-control"
+                        placeholder="Pesquisar...">
+                    <div class="input-group-append">
+                        <button id="btn-search" class="btn btn-primary">
+                            <span class="oi oi-magnifying-glass"></span>
+                        </button>
+                    </div>
                 </div>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-success" title="Cadastrar cliente" data-toggle="modal"
+                    data-target="#modal-create-product">Adicionar</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="my-5">
+    <div class="container">
+        <table class="table" id="tabelaProdutos">
+            <thead class="thead-light">
+                <tr>
+                    <th>#</th>
+                    <th>Código</th>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Valor</th>
+                    <th>Data cadastro</th>
+                    <th>Data de validade</th>
+                    <th>Quant. disp.</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each products}}
+                <tr>
+                    <td><a href="/products/{{id}}">{{id}}</a></td>
+                    <td>{{code}}</td>
+                    <td>{{name}}</td>
+                    <td>{{description}}</td>
+                    <td>{{priceFormat}}</td>
+                    <td>{{dateCreatedFormat}}</td>
+                    <td>{{expirationDateFormat}}</td>
+                    <td>{{quantityAvailable}}</td>
+                </tr>
+                {{/each }}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<div class="modal modal-fade" id="modal-create-product">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h2>Cadastrar produto</h2>
+                <p class="text-secondary">
+                    Insira as informações do novo produto e clique em Enviar
+                </p>
+                <form class="my-3">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="productNameFormInput">Nome</label>
+                                <input type="text" class="form-control" id="productNameFormInput"
+                                    placeholder="Creme de barbear" required>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="codeFormInput">Código</label>
+                                <input type="number" class="form-control" id="codeFormInput" placeholder="0042"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="priceFormInput">Preço por unidade</label>
+                                <input type="number" class="form-control" id="priceFormInput" placeholder="">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="descriptionFormInput">Descrição do produto</label>
+                                <textarea class="form-control" id="descriptionFormInput"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="quantityFormInput">Quantidade Disponível</label>
+                                <input type="number" class="form-control" id="quantityFormInput" placeholder="">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="expirationFormInput">Data de validade</label>
+                                <input type="date" class="form-control" id="expirationFormInput">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="check-non-expiration">
+                                    <label class="form-check-label" for="check-non-expiration">
+                                        Não possui validade
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn mr-2 text-primary">Cancelar</button>
+                <button type="button" id="btn-create" class="btn btn-success">Enviar</button>
             </div>
         </div>
     </div>
 </div>
+
+<script async src="/js/product.js"></script>
