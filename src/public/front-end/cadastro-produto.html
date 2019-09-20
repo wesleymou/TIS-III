@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/png" href="/logo.png" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <!-- Bootstrap Core -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">
+            <img src="/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
+            Figaro
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#conteudoNavbarSuportado"
+            aria-controls="conteudoNavbarSuportado" aria-expanded="false" aria-label="Alterna navegação">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="conteudoNavbarSuportado">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Cadastro
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">Clientes</a>
+                        <a class="dropdown-item" href="#">Produtos</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Algo mais aqui</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#">Desativado</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row mt-3">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <form>
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                            <div class="form-group">
+                                <label for="productFormInput">Nome</label>
+                                <input type="text" class="form-control" id="productFormInput"
+                                    placeholder="Creme de barbear" required>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                            <div class="row">
+                                <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-group">
+                                        <label for="codeFormInput">Código</label>
+                                        <input type="number" class="form-control" id="codeFormInput" placeholder="0042"
+                                            required>
+                                    </div>
+                                </div>
+                                <div class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5">
+                                    <div class="form-group">
+                                        <label for="quantityFormInput">Quantidade Disponível</label>
+                                        <input type="number" class="form-control" id="quantityFormInput" placeholder="">
+                                    </div>
+                                </div>
+                                <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                    <div class="form-group">
+                                        <label for="priceFormInput">Preço por unidade</label>
+                                        <input type="number" class="form-control" id="priceFormInput" placeholder="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                            <div class="form-group">
+                                <label for="dateFormInput">Data de compra</label>
+                                <input type="datetime-local" class="form-control" id="dateFormInput">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="check-today">
+                                    <label class="form-check-label" for="check-today">
+                                        Hoje
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                            <div class="form-group">
+                                <label for="validatyFormInput">Data de validade</label>
+                                <input type="datetime-local" class="form-control" id="validatyFormInput">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="check-non-validaty">
+                                    <label class="form-check-label" for="check-non-validaty">
+                                        Não possui validade
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <div class="form-group">
+                                <label for="descriptionFormInput">Descrição do produto</label>
+                                <textarea class="form-control" id="descriptionFormInput"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"></div>
+                        <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                            <button class="btn btn-success btn-block"> Enviar </button>
+                        </div>
+                        <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
