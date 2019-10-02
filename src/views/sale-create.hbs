@@ -9,11 +9,11 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6">
-                <form>
+                <form id="sale-form">
                     <div class="row">
                         <div class="col-lg-2">
                             <div class="form-group">
-                                <label for="nicknameFormInput">ID</label>
+                                <label for="nicknameFormInput">Código</label>
                                 <input type="number" class="form-control" id="productIdFormInput" placeholder=""
                                     required>
                             </div>
@@ -28,8 +28,13 @@
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="emailFormInput">Data da compra</label>
-                                <input type="datetime-local" class="form-control" id="saleDateFormInput" placeholder=""
-                                    required>
+                                <input type="datetime-local" class="form-control" id="saleDateFormInput" placeholder="" required>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="check-today">
+                                    <label class="form-check-label" for="check-non-expiration">
+                                        Hoje?
+                                    </label>
+                                </div>
                             </div>
                         </div>
                         <div class="col-lg-4">
@@ -60,8 +65,13 @@
                 </div>
             </div>
             <div class="col-3">
-                <button class="btn btn-success" title="Cadastrar cliente" data-toggle="modal"
-                    data-target="#modal-create-product">Adicionar</button>
+                <button class="btn btn-success" id="btn-create">Cadastrar venda</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-6 mt-2">
+                <button class="btn btn-info" data-toggle="modal"
+                    data-target="#modal-create-product">Adicionar novo produto</button>
             </div>
         </div>
     </div>
@@ -98,5 +108,52 @@
         </table>
     </div>
 </section>
+
+<div class="modal modal-fade" id="modal-create-product">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h2>Cadastrar produto</h2>
+                <p class="text-secondary">
+                    Insira as informações do novo produto e clique em Enviar
+                </p>
+                <form class="my-3">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="productNameFormInput">Nome</label>
+                                <input type="text" class="form-control" id="productNameFormInput"
+                                    placeholder="Creme de barbear" required>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="codeFormInput">Código</label>
+                                <input type="number" class="form-control" id="codeFormInput" placeholder="0042"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="priceFormInput">Preço por unidade</label>
+                                <input type="number" class="form-control" id="priceFormInput" placeholder="">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="descriptionFormInput">Descrição do produto</label>
+                                <textarea class="form-control" id="descriptionFormInput"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn mr-2 text-primary">Cancelar</button>
+                <button type="button" id="btn-create-product" class="btn btn-success">Enviar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script async defer src="/js/sale.js"></script>
