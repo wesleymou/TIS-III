@@ -1,0 +1,102 @@
+<section class="mt-3">
+    <div class="container">
+        <h1>Cadastrar Venda</h1>
+        <p class="text-secondary">Cadastrar a venda de um produto no sistema.</p>
+    </div>
+</section>
+
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <form>
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label for="nicknameFormInput">ID</label>
+                                <input type="number" class="form-control" id="productIdFormInput" placeholder=""
+                                    required>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label for="nameFormInput">Quant.</label>
+                                <input type="number" class="form-control" id="quantityFormInput" placeholder=""
+                                    required>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="emailFormInput">Data da compra</label>
+                                <input type="datetime-local" class="form-control" id="saleDateFormInput" placeholder=""
+                                    required>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="emailFormInput">Data de validade</label>
+                                <input type="datetime-local" class="form-control" id="expirationDateFormInput"
+                                    placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+</section>
+
+<section class="my-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-9 col-lg-3">
+                <div class="input-group">
+                    <input id="query-input" name="query-input" type="text" class="form-control"
+                        placeholder="Pesquisar...">
+                    <div class="input-group-append">
+                        <button id="btn-search" class="btn btn-primary">
+                            <span class="oi oi-magnifying-glass"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-success" title="Cadastrar cliente" data-toggle="modal"
+                    data-target="#modal-create-product">Adicionar</button>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="my-5">
+    <div class="container">
+        <table class="table" id="tabelaProdutos">
+            <thead class="thead-light">
+                <tr>
+                    <th>#</th>
+                    <th>Código</th>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Valor</th>
+                    <th>Data cadastro</th>
+                    <th>Data de validade</th>
+                    <th>Quant. disp.</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each products}}
+                <tr>
+                    <td><a href="/products/{{id}}">{{id}}</a></td>
+                    <td>{{code}}</td>
+                    <td>{{name}}</td>
+                    <td>{{description}}</td>
+                    <td>{{priceFormat}}</td>
+                    <td>{{dateCreatedFormat}}</td>
+                    <td>{{expirationDateFormat}}</td>
+                    <td>{{quantityAvailable}}</td>
+                </tr>
+                {{/each }}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<script async defer src="/js/sale.js"></script>
