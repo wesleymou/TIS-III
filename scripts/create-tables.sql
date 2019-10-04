@@ -15,8 +15,8 @@ CREATE TABLE product (
 CREATE TABLE sku (
 	id int NULL AUTO_INCREMENT,
 	product_id INT NOT NULL,
-	name varchar(256) NULL,
-	description varchar(512) NOT NULL,
+	name varchar(256) NOT NULL,
+	description varchar(512) NULL,
 	date_expires DATETIME NULL,
 	date_created DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	quantity_purchased int NOT NULL,
