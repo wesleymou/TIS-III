@@ -2,7 +2,7 @@ import Product from "./Product";
 import DateTimeUtil from "../utils/DateTimeUtil";
 import NumberUtil from "../utils/NumberUtil";
 
-type ProductViewModel = Product | {
+type ProductViewModel = Product & {
   priceFormat: string;
   dateCreatedFormat: string;
   expirationDateFormat: string;

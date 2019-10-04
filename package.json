@@ -9,7 +9,7 @@
     "tsc": "tsc",
     "build": "npm-run-all clean tsc copy-assets",
     "dev:start": "npm-run-all build start",
-    "dev": "nodemon --watch src -e ts,ejs --exec npm run dev:start",
+    "dev": "nodemon --watch src -e ts,hbs --exec npm run dev:start",
     "start": "node build/index",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

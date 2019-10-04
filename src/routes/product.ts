@@ -3,8 +3,13 @@ import { Router, Request, Response, NextFunction } from "express";
 import ProductService from "../services/ProductService";
 import Product from "../models/Product";
 import ProductListViewModel from '../models/ProductListViewModel';
+import SKUService from '../services/SKUService';
+import ProductViewModel from '../models/ProductViewModel';
+import SKU from '../models/SKU';
 
-const service = new ProductService();
+const productService = new ProductService();
+const skuService = new SKUService();
+
 const router = Router();
 
 router.get('/', async (req: Request, res: Response, next: NextFunction) => {
@@ -12,8 +17,8 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
     const query: string | undefined = req.query.q;
 
     const products: Product[] = query
-      ? await service.searchAsync(query)
-      : await service.getAllAsync();
+      ? await productService.searchAsync(query)
+      : await productService.getAllAsync();
 
     const viewModel = new ProductListViewModel(products);
 
@@ -23,6 +28,31 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
+router.get('/:id', async (req, res, next) => {
+  try {
+    const id: number = Number(req.params.id);
+
+    const product = await productService.getByIdAsync(id);
+
+    if (!product.id) {
+      return res.status(404).send('404 not found');
+    }
+
+    const skuList = await skuService.getByProductAsync(id);
+    const viewModel = new ProductListViewModel(skuList);
+
+    product.SKUList = skuList;
+
+    res.render('sku-list', {
+      title: 'Figaro - Estoque',
+      product: product,
+      skus: viewModel.products
+    });
+  } catch (err) {
+    next(createError(500, err));
+  }
+})
+
 router.post('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const product = normalizeProduct(req.body);
@@ -31,13 +61,61 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
       return next(createError(400, new Error('Informações inválidas.')))
     }
 
-    await service.createAsync(product);
+    await productService.createAsync(product);
 
     res.status(201).send();
   } catch (err) {
     next(createError(500, err));
   }
 });
+
+router.post('/:id', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = Number(req.params.id);
+    const sku = normalizeSku(req.body);
+
+    if (isNaN(id) || sku == null) {
+      return next(createError(400, new Error('Informações inválidas.')))
+    }
+
+    sku.productId = id;
+
+    await skuService.createAsync(sku);
+
+    res.status(201).send();
+  } catch (err) {
+    next(createError(500, err));
+  }
+});
+
+function normalizeSku(obj: any): SKU | null {
+  const {
+    price,
+    quantityAvailable,
+    expirationDate
+  } = obj;
+
+  console.log(price,
+    quantityAvailable,
+    expirationDate);
+
+
+  if (!Number(quantityAvailable) || !Number(price)) {
+    return null;
+  }
+
+  const sku: SKU = Object.assign(new SKU(), {
+    price,
+    quantityAvailable
+  });
+
+  const exp = new Date(expirationDate);
+  if (exp.valueOf()) {
+    sku.expirationDate = exp;
+  }
+
+  return sku;
+}
 
 /**
  * Valida e converte um objeto para o tipo Produto.
@@ -50,11 +128,10 @@ function normalizeProduct(obj: any): Product | null {
     code,
     description,
     price,
-    expirationDate,
     quantityAvailable
   } = obj;
 
-  if (!name || isNaN(Number(quantityAvailable)) || isNaN(Number(price))) {
+  if (!name) {
     return null;
   }
 
@@ -65,13 +142,6 @@ function normalizeProduct(obj: any): Product | null {
     price: Math.abs(Number(price)),
     quantityAvailable: Math.abs(Number(quantityAvailable)),
   });
-
-  const exp = new Date(expirationDate);
-
-  if (exp.valueOf()) {
-    product.expirationDate = exp;
-  }
-
   return product;
 }
 
