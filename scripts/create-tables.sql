@@ -37,3 +37,11 @@ CREATE TABLE customer (
 	date_created DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	CONSTRAINT customer_PK PRIMARY KEY (id)
 );
+
+-- Cria tabela de usuários
+CREATE TABLE user (
+	id int NOT NULL AUTO_INCREMENT,
+	login varchar(100) NOT NULL,
+	password varchar(256) NOT NULL,
+	CONSTRAINT user_PK PRIMARY KEY (id)
+);
