@@ -25,29 +25,30 @@ $(function() {
   });
 
   //Altera a propriedade "required" dos campos de data
-  $("#check-today").click(function() {
-    if ($("#check-today").is(":checked"))
-      $("#saleDateFormInput").attr("required", false);
-    else $("#saleDateFormInput").attr("required", true);
+  $(".check-today").click(function() {
+    let input = $(this).parent().parent().find("#saleDateFormInput");
+    if ($(this).is(":checked"))
+      $(input).attr("required", false);
+    else $(input).attr("required", true);
   });
 
   // Cadastra a venda ao clicar no botão de cadastrar
   $("#btn-create").click(function() {
     if ($("#sale-form")[0].reportValidity()) {
-      var dateVal = $("#expirationDateFormInput").val();
+      var dateVal = $("#sale-form #expirationDateFormInput").val();
       var expDate = null;
-      var saleDate = $("#expirationDateFormInput").val();
+      var saleDate;
 
-      if ($("#check-today").is(":checked")) saleDate = new Date();
-      else saleDate = new Date(saleDate).toISOString();
+      if (!$("#sale-form #saleDateFormInput").is(":required")) saleDate = new Date();
+      else saleDate = new Date($("#sale-form #saleDateFormInput").val()).toISOString();
 
       if (dateVal) {
         expDate = new Date(dateVal).toISOString();
       }
 
       var sale = {
-        id: $("#productIdFormInput").val(),
-        quantityAvailable: $("#quantityFormInput").val(),
+        id: $("#sale-form #codeFormInput").val(),
+        quantityAvailable: $("#sale-form #quantityFormInput").val(),
         saleDate: saleDate,
         expirationDate: expDate
       };
@@ -65,19 +66,25 @@ $(function() {
 
   // Cadastra o produto ao clicar no botão de cadastrar
   $("#btn-create-product").click(function() {
-    var dateVal = $("#expirationFormInput").val();
+    if($("#product-form")[0].reportValidity()){
+    var dateVal = $("#product-form #expirationDateFormInput").val();
     var expDate = null;
+    var saleDate;
+
+    if (!$("#product-form #saleDateFormInput").is(":required")) saleDate = new Date();
+    else saleDate = new Date($("#product-form #saleDateFormInput").val()).toISOString();
 
     if (dateVal) {
       expDate = new Date(dateVal).toISOString();
     }
 
     var product = {
-      name: $("#productNameFormInput").val(),
-      code: $("#codeFormInput").val(),
-      price: $("#priceFormInput").val(),
-      description: $("#descriptionFormInput").val(),
-      quantityAvailable: $("#quantityFormInput").val(),
+      name: $("#product-form #productNameFormInput").val(),
+      code: $("#product-form #codeFormInput").val(),
+      price: $("#product-form #priceFormInput").val(),
+      description: $("#product-form #descriptionFormInput").val(),
+      quantityAvailable: $("#product-form #quantityFormInput").val(),
+      saleDate: saleDate,
       expirationDate: expDate
     };
 
@@ -89,6 +96,7 @@ $(function() {
       .fail(function() {
         alert("Ocorreu um erro, verifique as informações e tente novamente.");
       });
+    }
   });
 
   // Limpa os campos ao fechar o modal de cadastro

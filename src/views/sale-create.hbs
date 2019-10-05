@@ -13,25 +13,25 @@
                     <div class="row">
                         <div class="col-lg-2">
                             <div class="form-group">
-                                <label for="nicknameFormInput">Código</label>
-                                <input type="number" class="form-control" id="productIdFormInput" placeholder=""
+                                <label for="codeFormInput">Código</label>
+                                <input type="number" class="form-control" id="codeFormInput" placeholder=""
                                     required>
                             </div>
                         </div>
                         <div class="col-lg-2">
                             <div class="form-group">
-                                <label for="nameFormInput">Quant.</label>
+                                <label for="quantityFormInput">Quant.</label>
                                 <input type="number" class="form-control" id="quantityFormInput" placeholder=""
                                     required>
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="form-group">
-                                <label for="emailFormInput">Data da compra</label>
+                                <label for="saleDateFormInput">Data da compra</label>
                                 <input type="datetime-local" class="form-control" id="saleDateFormInput" placeholder="" required>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="check-today">
-                                    <label class="form-check-label" for="check-non-expiration">
+                                    <input class="form-check-input check-today" type="checkbox" id="checkbox-form">
+                                    <label class="form-check-label" for="checkbox-form">
                                         Hoje?
                                     </label>
                                 </div>
@@ -39,7 +39,7 @@
                         </div>
                         <div class="col-lg-4">
                             <div class="form-group">
-                                <label for="emailFormInput">Data de validade</label>
+                                <label for="expirationDateFormInput">Data de validade</label>
                                 <input type="datetime-local" class="form-control" id="expirationDateFormInput"
                                     placeholder="">
                             </div>
@@ -117,7 +117,7 @@
                 <p class="text-secondary">
                     Insira as informações do novo produto e clique em Enviar
                 </p>
-                <form class="my-3">
+                <form class="my-3" id="product-form">
                     <div class="row">
                         <div class="col-12">
                             <div class="form-group">
@@ -143,6 +143,32 @@
                             <div class="form-group">
                                 <label for="descriptionFormInput">Descrição do produto</label>
                                 <textarea class="form-control" id="descriptionFormInput"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="saleDateFormInput">Data da compra</label>
+                                <input type="datetime-local" class="form-control" id="saleDateFormInput" placeholder="" required>
+                                <div class="form-check">
+                                    <input class="form-check-input check-today" type="checkbox" id="checkbox-modal">
+                                    <label class="form-check-label" for="checkbox-modal">
+                                        Hoje?
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="expirationDateFormInput">Data de validade</label>
+                                <input type="datetime-local" class="form-control" id="expirationDateFormInput"
+                                    placeholder="">
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="quantityFormInput">Quant.</label>
+                                <input type="number" class="form-control" id="quantityFormInput" placeholder=""
+                                    required>
                             </div>
                         </div>
                     </div>
