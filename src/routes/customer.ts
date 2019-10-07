@@ -3,9 +3,12 @@ import { Router, Request, Response, NextFunction } from "express";
 import CustomerService from "../services/CustomerService";
 import Customer from '../models/Customer';
 import CustomerListViewModel from '../models/CustomerListViewModel';
+import { checkAuthToken } from '../middlewares/session-check';
 
 const service = new CustomerService();
 const router = Router();
+
+router.use(checkAuthToken);
 
 router.get('/', async (req, res, next) => {
   try {

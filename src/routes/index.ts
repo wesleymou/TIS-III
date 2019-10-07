@@ -1,8 +1,13 @@
 import express, { Request, Response } from 'express';
+import { checkAuthToken } from '../middlewares/session-check';
 const router = express.Router();
 
 router.get('/', (req: Request, res: Response) => {
-    res.render('index');
+    if (req.session && req.session.token) {
+        res.redirect('/product')
+    } else {
+        res.render('index', { layout: false });
+    }
 });
 
 export default router;

@@ -1,4 +1,29 @@
-<div class="container py-5">
-    <img src="/logo.png" alt="" height="60" class="d-block mx-auto">
-    <h1 class="text-center">Figaro - Barbershop Manager</h1>
+{{> header }}
+
+<div class="container">
+    <div class="my-5">
+        <img class="d-block mx-auto" src="/logo.png" height="40" alt="Figaro logo">
+        <h4 class="text-center">
+            Figaro - Barbershop Manager
+        </h4>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-lg-4 mx-auto">
+            <div class="form-group">
+                <label for="login" class="label">Login:</label>
+                <input class="form-control" type="text" name="login" id="login" required>
+            </div>
+            <div class="form-group">
+                <label for="password" class="label">Senha:</label>
+                <input class="form-control" type="password" name="password" id="password" required>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-block btn-primary" id="submitButton">Entrar</button>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script src="/js/index.js"></script>
+
+{{> footer }}
