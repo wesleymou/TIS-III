@@ -6,11 +6,14 @@ import ProductListViewModel from '../models/ProductListViewModel';
 import SKUService from '../services/SKUService';
 import ProductViewModel from '../models/ProductViewModel';
 import SKU from '../models/SKU';
+import { checkAuthToken } from '../middlewares/session-check';
 
 const productService = new ProductService();
 const skuService = new SKUService();
 
 const router = Router();
+
+router.use(checkAuthToken);
 
 router.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {

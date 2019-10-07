@@ -9,15 +9,31 @@ import path from 'path';
 import logger from 'morgan';
 import exphbs from 'express-handlebars';
 import dotenv from 'dotenv';
+import session from 'express-session';
 
 dotenv.config();
 
 import indexRouter from './routes/index';
 import productRouter from './routes/product';
 import customerRouter from './routes/customer';
+import userRouter from './routes/user';
 
 const app = express();
 
+// Setup session store
+app.use(session({
+    secret: 'siviglia'
+}));
+
+const publicDir = process.env.NODE_ENV === 'development'
+    ? path.resolve(__dirname, '..', 'src', 'public')
+    : path.join(__dirname, 'public');
+
+const viewsDir = process.env.NODE_ENV === 'development'
+    ? path.resolve(__dirname, '..', 'src', 'views')
+    : path.join(__dirname, 'views');
+
+// Setup view engine
 const hbs: any = exphbs.create({
     extname: '.hbs',
     helpers: {
@@ -25,18 +41,19 @@ const hbs: any = exphbs.create({
     }
 });
 
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', viewsDir);
 app.engine('.hbs', hbs.engine);
 app.set('view engine', '.hbs');
 
 app.use(express.json());
 app.use(logger('dev'));
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(publicDir));
 
 app.use('/', indexRouter);
 app.use('/product', productRouter);
 app.use('/customer', customerRouter);
+app.use('/user', userRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
