@@ -48,7 +48,8 @@ class SKUService implements CrudAsync<SKU> {
             const sql = `SELECT s.*, p.code
                 from sku s
                 INNER JOIN product p ON p.id = s.product_id
-                WHERE p.id = 1`;
+                WHERE p.id = ?
+                ORDER BY s.id`;
 
             Database.query(sql, productId, (err, results: any[]) => {
                 if (!err) {

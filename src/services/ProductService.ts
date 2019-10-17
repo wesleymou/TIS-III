@@ -20,9 +20,9 @@ class ProductService implements CrudAsync<Product> {
   getByIdAsync(id: number): Promise<Product> {
     return new Promise((resolve, reject) => {
       const sql = `
-        select p.*, sum(s.quantity_available) as quantity_available
+        select p.*, IFNULL(sum(s.quantity_available), 0) as quantity_available
         from product p
-        inner join sku s on s.product_id = p.id 
+        inner join sku s on s.product_id = p.id
         where p.id = ?;`;
 
       Database.query(sql, id, (err, results) => {
@@ -44,9 +44,11 @@ class ProductService implements CrudAsync<Product> {
   getAllAsync(): Promise<Product[]> {
     return new Promise((resolve: Function, reject: Function) => {
       const sql = `
-        select p.*, sum(s.quantity_available) as quantity_available
-        from product p
-        inner join sku s on s.product_id = p.id;`;
+        SELECT product.*, IFNULL(sum(sku.quantity_available), 0) as quantity_available
+        from product
+        left join sku on sku.product_id = product.id
+        group by sku.product_id
+        order by product.id;`;
 
       Database.query(sql, (err: Error, results: any[]) => {
         if (!err) {
@@ -63,10 +65,12 @@ class ProductService implements CrudAsync<Product> {
     return new Promise((resolve: Function, reject: Function) => {
       const escaped = Database.escape('%' + query + '%');
       const sql = `
-        select p.*, sum(s.quantity_available) as quantity_available
+        select p.*, ifnull(sum(s.quantity_available), 0) as quantity_available
         from product p
-        inner join sku s on s.product_id = p.id
-        where p.name like ${escaped};`
+        left join sku s on s.product_id = p.id
+        where p.name like ${escaped}
+        group by p.id
+        order by p.id;`
 
       Database.query(sql, query, (err: Error | null, results: any[]) => {
         if (!err) {
