@@ -11,11 +11,11 @@
             <div class="col-12 col-lg-7">
                 <div class="row">
                     <div class="col-12">
-                        <h5>Adicionar produto</h5>
                         <div class="d-flex">
                             <input class="form-control" id="product" type="text" required>
                             <button class="btn btn-primary ml-3">Pesquisar</button>
                         </div>
+                        <h5>Clique nos produtos para adicionar</h5>
                     </div>
                 </div>
                 <div class="row">
@@ -23,7 +23,7 @@
                         <ul class="list-group">
                             {{#each product}}
                             <a href="#" class="list-group-item list-group-item-action bg-list my-3">
-                                <span hidden>{{sku}}</span>
+                                <span hidden>{{id}}</span>
                                 <div class="rounded">
                                     <div class="d-flex justify-content-between">
                                         <h4>{{name}}</h4>
