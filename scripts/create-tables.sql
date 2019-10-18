@@ -45,3 +45,34 @@ CREATE TABLE user (
 	password varchar(256) NOT NULL,
 	CONSTRAINT user_PK PRIMARY KEY (id)
 );
+
+-- Cria tabela de vendas
+CREATE TABLE sale (
+	id int NOT NULL AUTO_INCREMENT,
+	customer_id INT NOT NULL,
+	user_id INT NOT NULL,
+	total_price DECIMAL(13,2),
+	discount DECIMAL NULL,
+	date_created DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	date_updated DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	sale_status INT NOT NULL,
+	CONSTRAINT sale_PK PRIMARY KEY (id),
+	CONSTRAINT sale_user_FK FOREIGN KEY (user_id) REFERENCES `user`(id),
+	CONSTRAINT sale_customer_FK FOREIGN KEY (customer_id) REFERENCES customer(id)
+);
+
+-- Cria tabela de itens da venda
+CREATE TABLE sale_item (
+	id int NOT NULL AUTO_INCREMENT,
+	sku_id int NOT NULL,
+	sale_id int NOT NULL,
+	name varchar(256) NOT NULL,
+	description varchar(512) NULL,
+	date_expires DATETIME NULL,
+	quantity int NOT NULL,
+	price decimal(13,2) NOT NULL,
+	price_sold decimal(13,2) NOT NULL, 
+	CONSTRAINT sale_item_PK PRIMARY KEY (id),
+	CONSTRAINT sale_item_sku_FK FOREIGN KEY (sku_id) REFERENCES sku(id),
+	CONSTRAINT sale_item_sale_FK FOREIGN KEY (sale_id) REFERENCES sale(id) ON DELETE CASCADE
+);
