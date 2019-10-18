@@ -17,6 +17,7 @@ import indexRouter from './routes/index';
 import productRouter from './routes/product';
 import customerRouter from './routes/customer';
 import userRouter from './routes/user';
+import shoppingCartRouter from './routes/shopping-cart';
 
 const app = express();
 
@@ -54,6 +55,7 @@ app.use('/', indexRouter);
 app.use('/product', productRouter);
 app.use('/customer', customerRouter);
 app.use('/user', userRouter);
+app.use('/shopping-cart', shoppingCartRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
