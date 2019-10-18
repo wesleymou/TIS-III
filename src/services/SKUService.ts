@@ -2,6 +2,7 @@ import SKU from "../models/SKU";
 import Database from "./Database";
 import CrudAsync from "../models/CrudAsync";
 import { resolve } from "path";
+import { MysqlError } from "mysql";
 
 class SKUService implements CrudAsync<SKU> {
   createAsync(sku: SKU): Promise<void> {
@@ -37,20 +38,58 @@ class SKUService implements CrudAsync<SKU> {
   getPageAsync(page: number): Promise<SKU[]> {
     throw new Error("Method not implemented.");
   }
+
   getAllAsync(): Promise<SKU[]> {
     return new Promise((resolve, reject) => {
       const sql = `SELECT * from sku WHERE quantity_available > 0`;
 
       Database.query(sql, (err: Error, result: any[]) => {
-          if(!err){
-              const sku = result.map(mapRowToSku);
-            resolve(sku);
-          } else{
-              reject(err);
-          }
+        if (!err) {
+          const sku = result.map(mapRowToSku);
+          resolve(sku);
+        } else {
+          reject(err);
+        }
       });
     });
   }
+
+  searchProductAsync(query: string): Promise<SKU[]> {
+    return new Promise((resolve, reject) => {
+      const escaped = Database.escape(`%${query}%`);
+
+      const sql = `SELECT * from sku
+        WHERE (id = ? OR name like ${escaped})
+        AND quantity_available > 0
+        ORDER BY name, date_expires`;
+
+      const id = Number(query) || 0;
+
+      Database.query(sql, id, (err, result: any[]) => {
+        if (!err) {
+          const sku = result.map(mapRowToSku);
+          resolve(sku);
+        } else {
+          reject(err);
+        }
+      });
+    });
+  }
+
+  searchByIdAsync(ids: number[]): Promise<SKU[]> {
+    return new Promise((resolve, reject) => {
+      const sql = `SELECT * from sku WHERE id IN(${ids.join(',')});`;
+      Database.query(sql, (err, results: any[]) => {
+        if (!err) {
+          const sku = results.map(mapRowToSku);
+          resolve(sku);
+        } else {
+          reject(err);
+        }
+      });
+    });
+  }
+
   updateAsync(update: SKU): Promise<void> {
     throw new Error("Method not implemented.");
   }
