@@ -75,4 +75,4 @@ app.use(function (err: HttpError, req: Request, res: Response) {
 
 const port = process.env.PORT || 3000;
 
-app.listen(port, () => console.log('App listening on port ' + port));
+app.listen(port, () => console.log('App started at http://localhost:' + port));

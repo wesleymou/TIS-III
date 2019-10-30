@@ -12,31 +12,14 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="d-flex">
-                            <input class="form-control" id="product" type="text" required>
-                            <button class="btn btn-primary ml-3">Pesquisar</button>
+                            <input class="form-control" id="product-search-input" type="text" required>
+                            <button type="button" class="btn btn-primary btn-search ml-3">Pesquisar</button>
                         </div>
                         <h5>Clique nos produtos para adicionar</h5>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-12">
-                        <ul class="list-group">
-                            {{#each product}}
-                            <a href="#" class="list-group-item list-group-item-action bg-list my-3">
-                                <span hidden>{{id}}</span>
-                                <div class="rounded">
-                                    <div class="d-flex justify-content-between">
-                                        <h4>{{name}}</h4>
-                                        <h5>{{price}}</h5>
-                                    </div>
-                                    <div class="d-flex justify-content-between">
-                                        <p>{{description}}</p>
-                                        <small>Validade: {{expirationDateFormat}}</small>
-                                    </div>
-                                </div>
-                            </a>
-                            {{/each}}
-                        </ul>
+                    <div class="col-12 results">
                     </div>
                 </div>
             </div>
