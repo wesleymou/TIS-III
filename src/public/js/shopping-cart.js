@@ -19,30 +19,25 @@ $(function () {
     let exists = false;
     let skus = $(".product-sku");
 
+    const id = $(this).find(".hd-id").html();
+
     for (let i = 0; i < skus.length; i++) {
-      if (
-        skus[i].innerHTML ==
-        $(this)
-          .find("span")
-          .html()
-      ) {
+      if (skus[i].innerHTML == id) {
         alert("Produto já adicionado");
         return;
       }
     }
 
+    const name = $(this).find("h4").html();
+    const priceFormat = $(this).find("h5").html();
+    const price = $(this).find("h5").data('price');
+
     $("#card-itens").append(`
-        <div class="d-flex justify-content-between mb-3 bg-list px-3 py-2" id="cart-itens">
-            <span>${$(this)
-        .find("h4")
-        .html()}</span>
+        <div class="d-flex justify-content-between mb-3 bg-list px-3 py-2 sale-item">
+            <span>${name}</span>
             <input type="number" class="form-control product-quantity" value=1 style="width: 50px">
-            <span class="product-price">${$(this)
-        .find("h5")
-        .html()}</span>
-            <span class="product-sku" hidden>${$(this)
-        .find("span")
-        .html()}</span>
+            <span class="product-price" data-price="${price}">${priceFormat}</span>
+            <span class="product-sku" hidden>${id}</span>
         </div>
     `);
     $(".product-quantity").change(() => atualizarValores());
@@ -55,11 +50,7 @@ $(function () {
   $("#card-itens").bind("DOMSubtreeModified", () => atualizarValores());
 
   //Altera o valor total ao mudar o valor do desconto
-  $("#discount").change(function () {
-    $("#total-value").html(
-      parseFloat($("#partial-value").html()).toFixed(2) - $("#discount").val()
-    );
-  });
+  $("#discount").change(atualizarValores);
 
   $("#finalize").click(function () {
     if (parseFloat($("#total-value").html()) != 0) {
@@ -96,24 +87,26 @@ $(function () {
 
 //Altera o valor total e o parcial
 function atualizarValores() {
-  let soma = 0;
-  for (let i = 0; i < $("#card-itens").find("div").length; i++) {
-    soma +=
-      parseFloat(
-        $("#card-itens")
-          .find(`div:eq(${i})`)
-          .find(".product-price")
-          .html()
-      ) *
-      parseFloat(
-        $("#card-itens")
-          .find(`div:eq(${i})`)
-          .find(".product-quantity")
-          .val()
-      );
-  }
-  $("#partial-value").html(soma.toFixed(2));
-  $("#total-value").html((soma - $("#discount").val()).toFixed(2));
+  const prices = $('.sale-item').map((i, item) => {
+    const price = $(item).find('.product-price').data('price');
+    const quantity = $(item).find('.product-quantity').val();
+    return price * quantity;
+  }).get();
+
+  const soma = prices.reduce((p, n) => p + n);
+  const discount = $("#discount").val();
+  const ratio = 1 - Math.abs(discount / 100);
+  const total = ratio >= 0 ? soma * ratio : 0;
+
+  $("#partial-value").html(formatMoney(soma));
+  $("#total-value").html(formatMoney(total));
+}
+
+function formatMoney(num) {
+  return Number(num).toLocaleString('pt-br', {
+    style: 'currency',
+    currency: 'BRL'
+  });
 }
 
 function searchProducts(query) {
@@ -123,20 +116,6 @@ function searchProducts(query) {
   $.getJSON('/shopping-cart/' + query)
     .then((result) => renderProducts(result))
     .catch(() => $results.html('Ocorreu um erro :('));
-
-  `<a href="#" class="list-group-item list-group-item-action bg-list my-3">
-    <span hidden>{{id}}</span>
-    <div class="rounded">
-        <div class="d-flex justify-content-between">
-            <h4>{{name}}</h4>
-            <h5>{{price}}</h5>
-        </div>
-        <div class="d-flex justify-content-between">
-            <p>{{description}}</p>
-            <small>Validade: {{expirationDateFormat}}</small>
-        </div>
-    </div>
-  </a>`
 }
 
 function renderProducts({ products }) {
@@ -145,15 +124,15 @@ function renderProducts({ products }) {
     const $list = $('<ul class="list-group product-list"></ul>');
 
     const listItems = products.map(product => {
-      const { id, name, price, description, expirationDateFormat } = product;
+      const { id, name, price, description, priceFormat, expirationDateFormat } = product;
 
       const $element = $(`
         <a href="#" class="list-group-item list-group-item-action bg-list my-3">
-          <span hidden>${id}</span>
+          <span class="hd-id" hidden>${id}</span>
           <div class="rounded">
               <div class="d-flex justify-content-between">
                   <h4>${name}</h4>
-                  <h5>${price}</h5>
+                  <h5 data-price=${price}>${priceFormat}</h5>
               </div>
               <div class="d-flex justify-content-between">
                   <p>${description}</p>
