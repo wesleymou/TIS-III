@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.get('/', (req: Request, res: Response) => {
     if (req.session && req.session.token) {
-        res.redirect('/product')
+        res.redirect('/shopping-cart')
     } else {
         res.render('index', { layout: false });
     }

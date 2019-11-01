@@ -56,12 +56,16 @@ $(function () {
     const { items, discount } = getSaleInfo();
     if (items.length) {
       const cart = { items, discount };
-      $.post("/shopping-cart", cart)
+      console.log(cart);
+      $.post("/shopping-cart", cart, 'application/json')
         .then(() => {
           alert('Venda cadastrada com sucesso!');
-          window.location.assign(window.location.href);
+          window.location.assign('/shopping-cart');
         })
-        .catch(err => alert('Erro: ' + err));
+        .catch(err => {
+          console.error(err);
+          alert('Ocorreu um erro :(');
+        });
     } else {
       alert("Nenhum produto adicionado");
     }
