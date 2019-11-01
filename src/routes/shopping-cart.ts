@@ -61,6 +61,8 @@ router.get("/:query", async (req, res, next) => {
 async function validateSale(obj: any): Promise<Sale> {
   const { items, discount } = obj;
 
+  console.log('sale-obj', items)
+
   const normalDiscount = Math.abs(Number(discount));
 
   if (
@@ -87,7 +89,7 @@ async function validateSale(obj: any): Promise<Sale> {
   }
 
   const quantityUnavailable = skus.some(sku => {
-    const item = items.find(i => i.skuId === sku.id);
+    const item = items.find(i => i.skuId == sku.id);
     return sku.quantityAvailable < item.quantity;
   });
 
@@ -98,6 +100,7 @@ async function validateSale(obj: any): Promise<Sale> {
   const sale = new Sale();
 
   sale.discount = normalDiscount / 100;
+
   sale.items = skus.map(sku =>
     Object.assign(new SaleItem(), {
       skuId: sku.id,
@@ -105,7 +108,7 @@ async function validateSale(obj: any): Promise<Sale> {
       description: sku.description,
       expirationDate: sku.expirationDate,
       price: sku.price,
-      quantity: items.find(i => i.skuId === sku.id).quantity,
+      quantity: items.find(i => i.skuId == sku.id).quantity,
       priceSold: sku.price * (1 - sale.discount)
     })
   );

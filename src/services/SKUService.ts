@@ -11,7 +11,8 @@ class SKUService implements CrudAsync<SKU> {
         `INSERT INTO sku (product_id, name, description, date_expires, quantity_purchased, quantity_available, price)
                 SELECT id, name, description, ?, ?, ?, ?
                 FROM product
-                where id = ?`,
+                where id = ?
+                and active = 1`,
         [
           sku.expirationDate,
           sku.quantityAvailable,
@@ -41,7 +42,7 @@ class SKUService implements CrudAsync<SKU> {
 
   getAllAsync(): Promise<SKU[]> {
     return new Promise((resolve, reject) => {
-      const sql = `SELECT * from sku WHERE quantity_available > 0`;
+      const sql = `SELECT * from sku WHERE quantity_available > 0 and active = 1`;
 
       Database.query(sql, (err: Error, result: any[]) => {
         if (!err) {
@@ -61,6 +62,7 @@ class SKUService implements CrudAsync<SKU> {
       const sql = `SELECT * from sku
         WHERE (id = ? OR name like ${escaped})
         AND quantity_available > 0
+        and active = 1
         ORDER BY name, date_expires`;
 
       const id = Number(query) || 0;
@@ -93,8 +95,13 @@ class SKUService implements CrudAsync<SKU> {
   updateAsync(update: SKU): Promise<void> {
     throw new Error("Method not implemented.");
   }
+
   removeAsync(id: number): Promise<void> {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve, reject) => {
+      Database.query('update sku set active = 0 where id = ?', id)
+        .on('end', () => resolve())
+        .on('error', (err) => reject(err));
+    });
   }
 
   getByProductAsync(productId: number): Promise<SKU[]> {
@@ -103,6 +110,8 @@ class SKUService implements CrudAsync<SKU> {
                 from sku s
                 INNER JOIN product p ON p.id = s.product_id
                 WHERE p.id = ?
+                and p.active = 1
+                and s.active = 1
                 ORDER BY s.id`;
 
       Database.query(sql, productId, (err, results: any[]) => {

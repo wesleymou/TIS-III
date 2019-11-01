@@ -39,6 +39,7 @@
                     <th>Quant. comprada</th>
                     <th>Data de validade</th>
                     <th>Quant. disp.</th>
+                    <th>Ação</th>
                 </tr>
             </thead>
             <tbody>
@@ -60,6 +61,7 @@
                     <td>{{quantityPurchased}}</td>
                     <td>{{expirationDateFormat}}</td>
                     <td>{{quantityAvailable}}</td>
+                    <td><a href="javascript:" class="text-danger remove-action" data-id="{{id}}">Excluir</a></td>
                 </tr>
                 {{/each }}
             </tbody>

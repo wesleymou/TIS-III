@@ -54,7 +54,9 @@
                     <td>{{name}}</td>
                     <td>{{description}}</td>
                     <td>{{quantityAvailable}}</td>
-                    <td><a href="/product/{{id}}">Ver estoque</a></td>
+                    <td>
+                        <a href="/product/{{id}}">Ver estoque</a> |
+                        <a href="javascript:" class="text-danger remove-action" data-id="{{id}}">Excluir</a></td>
                 </tr>
                 {{/each }}
             </tbody>

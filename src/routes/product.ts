@@ -56,6 +56,18 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
+router.delete('/:id', async (req, res, next) => {
+  const id = Number(req.params.id);
+  await productService.removeAsync(id);
+  res.status(200).send();
+});
+
+router.delete('/sku/:id', async (req, res, next) => {
+  const id = Number(req.params.id);
+  await skuService.removeAsync(id);
+  res.status(200).send();
+})
+
 router.post('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const product = normalizeProduct(req.body);
