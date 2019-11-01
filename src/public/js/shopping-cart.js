@@ -53,32 +53,15 @@ $(function () {
   $("#discount").change(atualizarValores);
 
   $("#finalize").click(function () {
-    if (parseFloat($("#total-value").html()) != 0) {
-      let cart = {
-        products: [],
-        discount: $("#discount").val(),
-        total: $("#total-value").html()
-      };
-
-      for (let i = 0; i < $("#card-itens").find("div").length; i++) {
-        let product = {
-          sku: $("#card-itens")
-            .find(`div:eq(${i})`)
-            .find(".product-sku")
-            .html(),
-          price: $("#card-itens")
-            .find(`div:eq(${i})`)
-            .find(".product-price")
-            .html(),
-          quantity: $("#card-itens")
-            .find(`div:eq(${i})`)
-            .find(".product-quantity")
-            .val()
-        };
-        cart.products.push(product);
-      }
-
-      $.post("/shopping-cart", cart);
+    const { items, discount } = getSaleInfo();
+    if (items.length) {
+      const cart = { items, discount };
+      $.post("/shopping-cart", cart)
+        .then(() => {
+          alert('Venda cadastrada com sucesso!');
+          window.location.assign(window.location.href);
+        })
+        .catch(err => alert('Erro: ' + err));
     } else {
       alert("Nenhum produto adicionado");
     }
@@ -87,18 +70,8 @@ $(function () {
 
 //Altera o valor total e o parcial
 function atualizarValores() {
-  const prices = $('.sale-item').map((i, item) => {
-    const price = $(item).find('.product-price').data('price');
-    const quantity = $(item).find('.product-quantity').val();
-    return price * quantity;
-  }).get();
-
-  const soma = prices.reduce((p, n) => p + n);
-  const discount = $("#discount").val();
-  const ratio = 1 - Math.abs(discount / 100);
-  const total = ratio >= 0 ? soma * ratio : 0;
-
-  $("#partial-value").html(formatMoney(soma));
+  const { sum, total } = getSaleInfo();
+  $("#partial-value").html(formatMoney(sum));
   $("#total-value").html(formatMoney(total));
 }
 
@@ -107,6 +80,23 @@ function formatMoney(num) {
     style: 'currency',
     currency: 'BRL'
   });
+}
+
+function getSaleInfo() {
+  const items = $('.sale-item').map((i, item) => {
+    const price = $(item).find('.product-price').data('price');
+    const quantity = Number($(item).find('.product-quantity').val());
+    const skuId = Number($(item).find('.product-sku').html());
+    return { price, quantity, skuId };
+  }).get();
+
+  const prices = items.map(item => item.price * item.quantity);
+  const sum = prices.reduce((p, n) => p + n, 0);
+  const discount = Number($("#discount").val()) || 0;
+  const ratio = 1 - Math.abs(discount / 100);
+  const total = ratio >= 0 ? sum * ratio : 0;
+
+  return { items, prices, sum, discount, ratio, total };
 }
 
 function searchProducts(query) {
@@ -136,7 +126,7 @@ function renderProducts({ products }) {
               </div>
               <div class="d-flex justify-content-between">
                   <p>${description}</p>
-                  <small>Validade: ${expirationDateFormat}</small>
+                  <small>Validade: ${expirationDateFormat || 'N/D'}</small>
               </div>
           </div>
         </a>`);
