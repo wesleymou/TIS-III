@@ -26,6 +26,27 @@ $(function () {
     }
   });
 
+  $('.remove-action').click(function () {
+    const id = $(this).data('id');
+
+    const ok = confirm('Remover unidade?');
+
+    if (ok) {
+      $.ajax({
+        url: '/product/sku/' + id,
+        method: 'DELETE'
+      })
+        .then(function () {
+          alert('Unidade removida com successo.');
+          window.location.assign(window.location.href);
+        })
+        .catch(function (err) {
+          alert('Ocorreu um erro :(');
+          console.error(err);
+        });
+    }
+  });
+
   // Adiciona a unidade ao clicar no botão de adicionar
   $('#btn-create').click(function () {
     var dateVal = $('#expirationDateFormInput').val();

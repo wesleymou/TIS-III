@@ -47,6 +47,8 @@ class ProductService implements CrudAsync<Product> {
         SELECT product.*, IFNULL(sum(sku.quantity_available), 0) as quantity_available
         from product
         left join sku on sku.product_id = product.id
+        where product.active = 1
+        and sku.active = 1
         group by sku.product_id
         order by product.id;`;
 
@@ -69,6 +71,8 @@ class ProductService implements CrudAsync<Product> {
         from product p
         left join sku s on s.product_id = p.id
         where p.name like ${escaped}
+        and p.active = 1
+        and s.active = 1
         group by p.id
         order by p.id;`
 
@@ -88,7 +92,11 @@ class ProductService implements CrudAsync<Product> {
   }
 
   removeAsync(id: number): Promise<void> {
-    throw new Error('Method not implemented.');
+    return new Promise((resolve, reject) => {
+      Database.query('update product set active = 0 where id = ?', id)
+        .on('end', () => resolve())
+        .on('error', (err) => reject(err));
+    });
   }
 }
 

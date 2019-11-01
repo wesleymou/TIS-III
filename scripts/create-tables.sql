@@ -1,6 +1,7 @@
 -- Cria tabela de produtos
 CREATE TABLE product (
 	id INT NULL AUTO_INCREMENT,
+	active BIT DEFAULT 1 NOT NULL,
 	code varchar(100) NULL,
 	name varchar(256) NOT NULL,
 	description varchar(512) NULL,
@@ -14,6 +15,7 @@ CREATE TABLE product (
 -- Cria tabela de unidade de estoque
 CREATE TABLE sku (
 	id int NULL AUTO_INCREMENT,
+	active BIT DEFAULT 1 NOT NULL,
 	product_id INT NOT NULL,
 	name varchar(256) NOT NULL,
 	description varchar(512) NULL,
@@ -29,6 +31,7 @@ CREATE TABLE sku (
 -- Cria tabela de clientes
 CREATE TABLE customer (
 	id INT NOT NULL AUTO_INCREMENT,
+	active BIT DEFAULT 1 NOT NULL,
 	fullname varchar(100) NOT NULL,
 	nickname varchar(100) NULL,
 	phone varchar(100) NOT NULL,
@@ -41,6 +44,7 @@ CREATE TABLE customer (
 -- Cria tabela de usuários
 CREATE TABLE user (
 	id int NOT NULL AUTO_INCREMENT,
+	active BIT DEFAULT 1 NOT NULL,
 	login varchar(100) NOT NULL,
 	password varchar(256) NOT NULL,
 	CONSTRAINT user_PK PRIMARY KEY (id)

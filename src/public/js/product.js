@@ -25,6 +25,27 @@ $(function () {
     }
   });
 
+  $('.remove-action').click(function () {
+    const id = $(this).data('id');
+
+    const ok = confirm('Remover produto?');
+
+    if (ok) {
+      $.ajax({
+        url: '/product/' + id,
+        method: 'DELETE'
+      })
+        .then(function () {
+          alert('Produto removido com successo.');
+          window.location.assign(window.location.href);
+        })
+        .catch(function (err) {
+          alert('Ocorreu um erro :(');
+          console.error(err);
+        });
+    }
+  });
+
   // Cadastra o produto ao clicar no botão de cadastrar
   $('#btn-create').click(function () {
     var dateVal = $('#expirationFormInput').val();
