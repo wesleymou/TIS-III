@@ -27,7 +27,7 @@ $(function () {
   function signIn(user) {
     $.post('/user/signin', user)
       .then(function () {
-        window.location.assign('/product')
+        window.location.assign('/shopping-cart')
       })
       .fail(function (jqXHR) {
         alert('Erro: ' + jqXHR.responseText + '.');

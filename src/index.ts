@@ -5,6 +5,7 @@ Intl.DateTimeFormat = IntlPolyfill.DateTimeFormat;
 
 import createError, { HttpError } from 'http-errors';
 import express, { Request, Response } from 'express';
+import bodyParser from 'body-parser';
 import path from 'path';
 import logger from 'morgan';
 import exphbs from 'express-handlebars';
@@ -46,7 +47,8 @@ app.set('views', viewsDir);
 app.engine('.hbs', hbs.engine);
 app.set('view engine', '.hbs');
 
-app.use(express.json());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
 app.use(logger('dev'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(publicDir));
@@ -75,4 +77,4 @@ app.use(function (err: HttpError, req: Request, res: Response) {
 
 const port = process.env.PORT || 3000;
 
-app.listen(port, () => console.log('App listening on port ' + port));
+app.listen(port, () => console.log('App started at http://localhost:' + port));
