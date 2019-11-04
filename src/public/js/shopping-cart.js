@@ -4,7 +4,7 @@ $(function () {
     if (e.key === 'Enter') {
       $('.btn-search').click();
     }
-  })
+  });
 
   $('.btn-search').click(() => {
     const query = $('#product-search-input').val();
@@ -33,14 +33,31 @@ $(function () {
     const price = $(this).find("h5").data('price');
 
     $("#card-itens").append(`
-        <div class="d-flex justify-content-between mb-3 bg-list px-3 py-2 sale-item">
+        <div class="d-flex justify-content-between align-items-center mb-3 bg-list px-3 py-2 sale-item">
             <span>${name}</span>
-            <input type="number" class="form-control product-quantity" value=1 style="width: 50px">
+            <input type="number" class="form-control product-quantity" value=1 style="width: 80px">
             <span class="product-price" data-price="${price}">${priceFormat}</span>
+            <i class="oi oi-trash remove-product" style="cursor: pointer"></i>
             <span class="product-sku" hidden>${id}</span>
         </div>
     `);
+
     $(".product-quantity").change(() => atualizarValores());
+  });
+
+  $(document).on('change', '.product-quantity', function () {
+    const value = Number($(this).val()) || 0;
+    if (value <= 0) {
+      const $item = $(this).closest('.sale-item');
+      $item.remove();
+      atualizarValores();
+    }
+  });
+
+  $(document).on('click', '.remove-product', function () {
+    const $item = $(this).closest('.sale-item');
+    $item.remove();
+    atualizarValores();
   });
 
   //Altera o valor total e o parcial ao mudar a quantidade de itens
