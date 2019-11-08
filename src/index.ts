@@ -39,6 +39,8 @@ const viewsDir = process.env.NODE_ENV === 'development'
 const hbs: any = exphbs.create({
     extname: '.hbs',
     helpers: {
+        eq: (a: any, b: any) => a == b,
+        isAnonId: (id: any) => id == process.env.ANON_ID,
         json: (obj: any) => JSON.stringify(obj)
     }
 });
