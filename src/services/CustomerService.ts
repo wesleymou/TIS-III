@@ -21,7 +21,18 @@ class CustomerService implements CrudAsync<Customer> {
   }
 
   getByIdAsync(id: number): Promise<Customer> {
-    throw new Error("Method not implemented.");
+    const sql = 'select * from customer where id = ?';
+
+    return new Promise((resolve: Function, reject: Function) => {
+      Database.query(sql, id, (err, results: any[]) => {
+        if (!err) {
+          const [customer] = results.map(mapRowToCustomer);
+          resolve(customer);
+        } else {
+          reject(err);
+        }
+      });
+    });
   }
 
   getPageAsync(page: number): Promise<Customer[]> {
@@ -29,7 +40,7 @@ class CustomerService implements CrudAsync<Customer> {
   }
 
   getAllAsync(): Promise<Customer[]> {
-    const sql = 'select * from customer';
+    const sql = 'select * from customer where active = 1';
 
     return new Promise((resolve: Function, reject: Function) => {
       Database.query(sql, (err: Error, results: any[]) => {
@@ -45,7 +56,9 @@ class CustomerService implements CrudAsync<Customer> {
 
   searchAsync(query: string): Promise<Customer[]> {
     const escaped = Database.escape('%' + query + '%');
-    const sql = `select * from customer where fullname like ${escaped} or nickname like ${escaped};`
+    const sql = `select * from customer 
+      where (fullname like ${escaped} or nickname like ${escaped} or id = ${escaped})
+      and active = 1;`
 
     return new Promise((resolve: Function, reject: Function) => {
       Database.query(sql, (err: Error, results: any[]) => {
@@ -59,11 +72,26 @@ class CustomerService implements CrudAsync<Customer> {
     });
   }
 
-  updateAsync(update: Customer): Promise<void> {
+  updateAsync(update: any): Promise<void> {
     throw new Error("Method not implemented.");
   }
+
+  updateWithIdAsync(id: number, update: any): Promise<void> {
+    const sql = `update customer set ? where id = ${id}`;
+    return new Promise((resolve: Function, reject: Function) => {
+      Database.query(sql, update)
+        .on('end', () => resolve())
+        .on('error', e => reject(e));
+    });
+  }
+
   removeAsync(id: number): Promise<void> {
-    throw new Error("Method not implemented.");
+    const sql = `update customer set active = 0 where id = ?`;
+    return new Promise((resolve: Function, reject: Function) => {
+      Database.query(sql, id)
+        .on('end', () => resolve())
+        .on('error', e => reject(e));
+    });
   }
 }
 
