@@ -59,8 +59,10 @@ CREATE TABLE sale (
 	discount DECIMAL NULL,
 	date_created DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	date_updated DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	payment_date DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	sale_status INT NOT NULL,
 	CONSTRAINT sale_PK PRIMARY KEY (id),
+	CONSTRAINT sale_sale_status_FK FOREIGN KEY (sale_status) REFERENCES sale_status(id),
 	CONSTRAINT sale_user_FK FOREIGN KEY (user_id) REFERENCES `user`(id),
 	CONSTRAINT sale_customer_FK FOREIGN KEY (customer_id) REFERENCES customer(id)
 );
