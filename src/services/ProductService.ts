@@ -46,10 +46,11 @@ class ProductService implements CrudAsync<Product> {
       const sql = `
         SELECT product.*, IFNULL(sum(sku.quantity_available), 0) as quantity_available
         from product
-        left join sku on sku.product_id = product.id
+        left join sku 
+          on sku.product_id = product.id
+          and sku.active = 1
         where product.active = 1
-        and sku.active = 1
-        group by sku.product_id
+        group by product.id
         order by product.id;`;
 
       Database.query(sql, (err: Error, results: any[]) => {
