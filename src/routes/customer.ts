@@ -27,7 +27,18 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.get('/:id', async (req, res, next) => {
+router.get('/search', async (req, res, next) => {
+  try {
+    req.query.q
+    const customers = await service.searchAsync(req.query.q);
+    const viewModel = new CustomerListViewModel(customers);
+    res.json(viewModel.customers);
+  } catch (err) {
+    next(createError(500, err));
+  }
+});
+
+router.get('/:id(\d+)', async (req, res, next) => {
   try {
     const id = Number(req.params.id);
 

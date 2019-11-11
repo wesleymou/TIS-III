@@ -10,6 +10,8 @@ import SKU from "../models/SKU";
 import Sale from "../models/Sale";
 import SaleItem from "../models/SaleItem";
 
+import { getAllPaymentMethods } from '../models/PaymentMethod';
+
 import { checkAuthToken } from "../middlewares/session-check";
 
 const skuService = new SKUService();
@@ -20,11 +22,9 @@ const router = Router();
 router.use(checkAuthToken);
 
 router.get("/", async (req, res) => {
-  const skuList = await skuService.getAllAsync();
-  const viewModel = new ProductListViewModel(skuList);
   res.render("shopping-cart", {
-    title: "Figaro - Estoque",
-    product: viewModel.products
+    title: "Figaro - Registrar Venda",
+    paymentMethods: getAllPaymentMethods()
   });
 });
 
@@ -117,6 +117,9 @@ async function validateSale(obj: any): Promise<Sale> {
     (total, item) => item.priceSold * item.quantity + total,
     0
   );
+
+  sale.paymentMethodId = 1;
+  sale.paymentDate = new Date();
 
   return sale;
 }

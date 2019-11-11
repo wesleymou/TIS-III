@@ -1,12 +1,12 @@
 <section class="mt-3">
-    <div class="container-fluid">
+    <div class="container">
         <h1>Venda</h1>
         <p class="text-secondary">Registrar venda</p>
     </div>
 </section>
 
 <section class="my-5">
-    <div class="container-fluid">
+    <div class="container">
         <div class="row">
             <div class="col-12 col-lg-7">
                 <div class="row">
@@ -23,6 +23,7 @@
                 </div>
                 <div class="row">
                     <div class="col-12 results">
+                        <div class="results-helper text-black-50">Os resultados da busca aparecem aqui.</div>
                     </div>
                 </div>
             </div>
@@ -31,11 +32,39 @@
                 <div class="card rounded shadow-sm">
                     <div class="card-body" id="card-itens">
                         <h4>Itens</h4>
-                    </div>
-                    <div class="card-body">
+
+                        <div class="d-flex justify-content-between mb-4">
+                            <div>
+                                <small class="align-self-center">Cliente:</small>
+                            </div>
+                            <div class="text-right">
+                                <input type="hidden" id="customerId">
+                                <strong id="customer-name">Anônimo</strong>
+                                <br>
+                                <a data-toggle="modal" data-target="#search-customer-modal" href="javascript:">Alterar
+                                    cliente</a>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between mb-3">
+                            <small class="align-self-center">Data de pagamento:</small>
+                            <input class="form-control" id="paymentDate" type="date" style="width: 200px;" disabled>
+                        </div>
+
+                        <div class="d-flex justify-content-between mb-3">
+                            <small class="align-self-center">Método de pagamento:</small>
+                            <select class="form-control" id="paymentMethod" type="date" style="width: 200px;">
+
+                                {{#each paymentMethods}}
+                                <option value="{{id}}">{{name}}</option>
+                                {{/each}}
+
+                            </select>
+                        </div>
+
                         <div class="d-flex justify-content-between mb-3">
                             <small class="align-self-center">Total:</small>
-                            <h4 id="partial-value">R$ 0</h4>
+                            <h4 id="partial-value">R$ 0,00</h4>
                         </div>
                         <div class="d-flex justify-content-between mb-3">
                             <small class="align-self-center">Desconto (%):</small>
@@ -43,7 +72,7 @@
                         </div>
                         <div class="d-flex justify-content-between mb-3">
                             <small class="align-self-center">A receber:</small>
-                            <h3 id="total-value">R$ 0</h3>
+                            <h3 id="total-value">R$ 0,00</h3>
                         </div>
                         <button class="btn btn-primary col-12" id="finalize">Registrar Venda</button>
                     </div>
@@ -52,5 +81,74 @@
         </div>
     </div>
 </section>
+
+<div class="modal fade" id="search-customer-modal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">Selecionar cliente</div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row">
+
+                        <div class="col-9 form-group">
+                            Selecione um cliente para ser vinculado a esta venda:
+                        </div>
+
+                        <div class="col-3 form-group text-right text-black-50 small">
+                            ou
+                            <a href="/customer" target="_blank">clique aqui</a>
+                            para cadastrar um cliente
+                        </div>
+
+                        <div class="col-12 form-group">
+                            <label for="customer-search-input">Pesquisar cliente:</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="customer-search-input"
+                                    placeholder="Nome ou apelido do cliente">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary btn-search-customer" title="Pesquisar"
+                                        data-toggle="tooltip">
+                                        <i class="oi oi-magnifying-glass"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 form-group">
+                            <div class="mb-3">
+                                <i class="oi oi-sun text-info small"></i>
+                                <span class="customer-list-helper text-black-50">
+                                    Clientes pesquisados aparecem aqui
+                                </span>
+                            </div>
+                            <table class="table table-sm table-hover">
+                                <tbody style="cursor: pointer;" id="customer-list">
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="col-12 form-group">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="anonymous-user-checkbox"
+                                    disabled checked>
+                                <label class="custom-control-label" for="anonymous-user-checkbox">
+                                    <strong>Anônimo</strong> (não selecionar um cliente)
+                                </label>
+                            </div>
+                            <span class="text-info">
+                                <strong>Observação: </strong>
+                                Vendas a prazo não podem ser realizadas para clientes não registrados.
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" data-dismiss="modal">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="/js/shopping-cart.js"></script>
