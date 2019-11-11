@@ -7,6 +7,7 @@ class Sale {
     totalPrice = 0;
     discount = 0;
     dateCreated?: Date;
+    datePayment?: Date
     dateUpdated?: Date;
     saleStatus = 0;
     items: SaleItem[] = [];
