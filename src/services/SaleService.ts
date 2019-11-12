@@ -13,9 +13,32 @@ class SaleService implements CrudAsync<Sale> {
             where sku.id = ${item.skuId};
         `).join('');
 
+        const paymentDateParts = (sale.paymentDate || new Date())
+            .toLocaleDateString()
+            .split('/');
+
+        const [month, date, year] = paymentDateParts;
+        const paymentDate = [year, month, date].join('-');
+
         const sql = `
-            insert into sale (customer_id, user_id, discount, total_price, sale_status, payment_date, payment_method_id)
-            values (2, 1, ${sale.discount}, ${sale.totalPrice}, 1, ${sale.paymentDate}, ${sale.paymentMethodId});
+            insert into sale (
+                customer_id,
+                user_id,
+                discount,
+                total_price,
+                sale_status_id,
+                payment_date,
+                payment_method_id
+            )
+            values (
+                ${sale.customerId}, 
+                1, 
+                ${sale.discount}, 
+                ${sale.totalPrice}, 
+                ${sale.saleStatus}, 
+                cast('${paymentDate}' as datetime), 
+                ${sale.paymentMethodId}
+            );
             set @sale_id = LAST_INSERT_ID();
 
             ${itemsInsertQuery}

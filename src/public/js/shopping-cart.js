@@ -17,7 +17,6 @@ $(function () {
 
   //Adiciona itens da lista para o carrinho. Se o produto já foi adicionado, mostra um alert
   $(document).on('click', '.list-group-item-action', function () {
-    let exists = false;
     let skus = $(".product-sku");
 
     const id = $(this).find(".hd-id").html();
@@ -32,29 +31,32 @@ $(function () {
     const name = $(this).find("h4").html();
     const priceFormat = $(this).find("h5").html();
     const price = $(this).find("h5").data('price');
+    const quantityAvailable = $(this).find('.quantity-available').html();
 
     $("#card-itens").append(`
         <div class="d-flex justify-content-between align-items-center mb-3 bg-list px-3 py-2 sale-item">
-            <small class="text-black-50">#${id}</small>
             <span>${name}</span>
-            <input type="number" class="form-control product-quantity" value=1 style="width: 80px">
+            <input type="number" class="form-control product-quantity" value=1 style="width: 80px" max="${quantityAvailable}">
             <span class="product-price" data-price="${price}">${priceFormat}</span>
             <i class="oi oi-trash remove-product" style="cursor: pointer"></i>
             <span class="product-sku" hidden>${id}</span>
         </div>
     `);
 
-    $(".product-quantity").change(() => atualizarValores());
+    atualizarValores();
   });
 
   // Ao mudar a quantidade de produtos
   $(document).on('change', '.product-quantity', function () {
     const value = Number($(this).val()) || 0;
-    if (value <= 0) {
+
+    if (value > this.max) {
+      $(this).val(this.max);
+    } else if (value <= 0) {
       const $item = $(this).closest('.sale-item');
       $item.remove();
-      atualizarValores();
     }
+    atualizarValores();
   });
 
   // Ao clicar no botão de remover produto do carrinho (lixeira)
@@ -244,7 +246,7 @@ function renderProducts({ products }) {
     const $list = $('<ul class="list-group product-list"></ul>');
 
     const listItems = products.map(product => {
-      const { id, name, price, description, priceFormat, expirationDateFormat } = product;
+      const { id, name, price, description, priceFormat, expirationDateFormat, quantityAvailable } = product;
 
       const $element = $(`
         <div class="list-group-item list-group-item-action bg-list my-3" style="cursor: pointer">
@@ -256,6 +258,9 @@ function renderProducts({ products }) {
               </div>
               <div class="d-flex justify-content-between">
                   <p>${description}</p>
+                  <span>
+                    <span class="quantity-available">${quantityAvailable}</span> disponíveis
+                  </span>
                   <small>Validade: ${expirationDateFormat || 'N/D'}</small>
               </div>
           </div>
