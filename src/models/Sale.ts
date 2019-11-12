@@ -9,6 +9,7 @@ class Sale {
     paymentMethodId = 0;
     paymentDate?: Date;
     dateCreated?: Date;
+    datePayment?: Date
     dateUpdated?: Date;
     saleStatus = 0;
     items: SaleItem[] = [];
