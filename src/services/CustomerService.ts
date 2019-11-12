@@ -2,6 +2,8 @@ import CrudAsync from "../models/CrudAsync";
 import Customer from "../models/Customer";
 import Database from './Database';
 
+const anonId = process.env.ANON_ID || 2;
+
 class CustomerService implements CrudAsync<Customer> {
   createAsync(customer: Customer): Promise<void> {
     const sql = `insert into customer(fullname, nickname, phone, email, address)
@@ -57,7 +59,8 @@ class CustomerService implements CrudAsync<Customer> {
   searchAsync(query: string): Promise<Customer[]> {
     const escaped = Database.escape('%' + query + '%');
     const sql = `select * from customer 
-      where (fullname like ${escaped} or nickname like ${escaped} or id = ${escaped})
+      where (fullname like ${escaped} or nickname like ${escaped})
+      and id <> ${anonId}
       and active = 1;`
 
     return new Promise((resolve: Function, reject: Function) => {

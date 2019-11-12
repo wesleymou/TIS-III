@@ -10,7 +10,11 @@ import SKU from "../models/SKU";
 import Sale from "../models/Sale";
 import SaleItem from "../models/SaleItem";
 
+import { getAllPaymentMethods } from '../models/PaymentMethod';
+
 import { checkAuthToken } from "../middlewares/session-check";
+
+const anonId = Number(process.env.ANON_ID) || 2;
 
 const skuService = new SKUService();
 const saleService = new SaleService();
@@ -20,11 +24,9 @@ const router = Router();
 router.use(checkAuthToken);
 
 router.get("/", async (req, res) => {
-  const skuList = await skuService.getAllAsync();
-  const viewModel = new ProductListViewModel(skuList);
   res.render("shopping-cart", {
-    title: "Figaro - Estoque",
-    product: viewModel.products
+    title: "Figaro - Registrar Venda",
+    paymentMethods: getAllPaymentMethods()
   });
 });
 
@@ -59,9 +61,7 @@ router.get("/:query", async (req, res, next) => {
 });
 
 async function validateSale(obj: any): Promise<Sale> {
-  const { items, discount } = obj;
-
-  console.log('sale-obj', items)
+  const { items, discount, paymentMethodId, customerId, paymentDate } = obj;
 
   const normalDiscount = Math.abs(Number(discount));
 
@@ -117,6 +117,23 @@ async function validateSale(obj: any): Promise<Sale> {
     (total, item) => item.priceSold * item.quantity + total,
     0
   );
+
+  if (paymentDate) {
+    const [year, month, day] = paymentDate.split('-');
+    sale.paymentDate = new Date(Number(year), Number(month) - 1, Number(day));
+  } else {
+    sale.paymentDate = new Date();
+  }
+
+  if (sale.paymentDate.valueOf() > Date.now()) {
+    sale.saleStatus = 1 // pendente
+  } else {
+    sale.saleStatus = 3 // finalizada
+  }
+
+  sale.customerId = Number(customerId) || anonId;
+
+  sale.paymentMethodId = paymentMethodId || 1;
 
   return sale;
 }

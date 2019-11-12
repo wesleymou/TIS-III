@@ -6,6 +6,8 @@ class Sale {
     userId = 0;
     totalPrice = 0;
     discount = 0;
+    paymentMethodId = 0;
+    paymentDate?: Date;
     dateCreated?: Date;
     dateUpdated?: Date;
     saleStatus = 0;
