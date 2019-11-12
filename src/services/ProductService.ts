@@ -92,6 +92,15 @@ class ProductService implements CrudAsync<Product> {
     throw new Error('Method not implemented.');
   }
 
+  updateWithIdAsync(id: number, update: any): Promise<void> {
+    const sql = `update product set ? where id = ${id}`;
+    return new Promise((resolve: Function, reject: Function) => {
+      Database.query(sql, update)
+        .on('end', () => resolve())
+        .on('error', e => reject(e));
+    });
+  }
+
   removeAsync(id: number): Promise<void> {
     return new Promise((resolve, reject) => {
       Database.query('update product set active = 0 where id = ?', id)

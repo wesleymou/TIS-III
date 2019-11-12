@@ -32,4 +32,10 @@ $(function () {
       }
     }
   });
+
+  $(function () {
+    $('.table-action').tooltip();
+    $('[data-toggle="tooltip"]').tooltip();
+  });
+
 });
