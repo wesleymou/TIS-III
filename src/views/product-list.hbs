@@ -20,8 +20,8 @@
                 </div>
             </div>
             <div class="col-3">
-                <button class="btn btn-success" title="Cadastrar cliente" data-toggle="modal"
-                    data-target="#modal-create-product">Cadastrar novo produto</button>
+                <button class="btn btn-success btn-open-create-modal">
+                    Cadastrar novo produto</button>
             </div>
         </div>
     </div>
@@ -55,8 +55,13 @@
                     <td>{{description}}</td>
                     <td>{{quantityAvailable}}</td>
                     <td>
-                        <a href="/product/{{id}}">Ver estoque</a> |
-                        <a href="javascript:" class="text-danger remove-action" data-id="{{id}}">Excluir</a></td>
+                        <a class="text-warning table-action" href="/product/view/{{id}}" title="Ver estoque">
+                            <i class="oi oi-list" data-id="{{id}}"></i></a>
+                        <i class="oi oi-pencil text-primary table-action edit-action" data-id="{{id}}"
+                            title="Editar produto"></i>
+                        <i class="oi oi-trash text-danger table-action remove-action" data-id="{{id}}"
+                            title="Excluir produto"></i>
+                    </td>
                 </tr>
                 {{/each }}
             </tbody>
@@ -70,7 +75,7 @@
             <div class="modal-body">
                 <h2>Cadastrar produto</h2>
                 <p class="text-secondary">
-                    Insira as informações do novo produto e clique em Enviar
+                    Insira as informações do produto e clique no botão "Salvar"
                 </p>
                 <form class="my-3">
                     <div class="row">
@@ -88,11 +93,12 @@
                             </div>
                         </div>
                     </div>
+                    <input type="hidden" id="idFormInput" name="idFormInput">
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn mr-2 text-primary">Cancelar</button>
-                <button type="button" id="btn-create" class="btn btn-success">Enviar</button>
+                <button type="button" id="btn-create" class="btn btn-success">Salvar</button>
             </div>
         </div>
     </div>

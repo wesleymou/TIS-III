@@ -65,7 +65,7 @@ $(function () {
     $.post('/product/' + productId, sku)
       .then(function (response) {
         alert('Item cadastrado com sucesso!');
-        window.location.assign('/product/' + productId);
+        window.location.assign('/product/view/' + productId);
       })
       .fail(function () {
         alert('Ocorreu um erro, verifique as informações e tente novamente.');

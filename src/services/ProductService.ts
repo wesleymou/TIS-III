@@ -46,10 +46,11 @@ class ProductService implements CrudAsync<Product> {
       const sql = `
         SELECT product.*, IFNULL(sum(sku.quantity_available), 0) as quantity_available
         from product
-        left join sku on sku.product_id = product.id
+        left join sku 
+          on sku.product_id = product.id
+          and sku.active = 1
         where product.active = 1
-        and sku.active = 1
-        group by sku.product_id
+        group by product.id
         order by product.id;`;
 
       Database.query(sql, (err: Error, results: any[]) => {
@@ -89,6 +90,15 @@ class ProductService implements CrudAsync<Product> {
 
   updateAsync(update: Product): Promise<void> {
     throw new Error('Method not implemented.');
+  }
+
+  updateWithIdAsync(id: number, update: any): Promise<void> {
+    const sql = `update product set ? where id = ${id}`;
+    return new Promise((resolve: Function, reject: Function) => {
+      Database.query(sql, update)
+        .on('end', () => resolve())
+        .on('error', e => reject(e));
+    });
   }
 
   removeAsync(id: number): Promise<void> {
