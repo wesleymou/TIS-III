@@ -1,6 +1,9 @@
 $(function() {
+  $("#tabelaVendas").dataTable();
+
   $(".products-detail-action").click(function() {
     $.get(`/sales-history/${$(this).data("id")}`).then(res => {
+      $("#TituloModal").html(res[0].saleId);
       res.forEach(row => {
         $("#myModal #modal-table-body").append(`
           <tr>

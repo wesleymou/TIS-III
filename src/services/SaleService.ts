@@ -73,7 +73,7 @@ class SaleService implements CrudAsync<Sale> {
   }
   getAllAsync(): Promise<SaleDetail[]> {
     const sql = `
-      SELECT s.id, ifnull(c.nickname, c.fullname) as customer_name, s.sale_status_id, s.date_created, payment_date, s.discount, s.total_price
+      SELECT s.id, ifnull(c.nickname, c.fullname) as customer_name, s.sale_status_id, s.date_created, payment_date, s.discount, s.total_price, s.payment_method_id
       FROM sale s 
       INNER JOIN customer c 
       ON c.id = s.customer_id
@@ -105,7 +105,8 @@ function mapRowToSaleDetail(row: any): SaleDetail {
     dateCreated: row["date_created"],
     datePayment: row["payment_date"],
     discount: row["discount"],
-    totalPrice: row["total_price"]
+    totalPrice: row["total_price"],
+    paymentMethodId: row["payment_method_id"]
   });
 }
 
