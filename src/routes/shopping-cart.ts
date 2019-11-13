@@ -10,7 +10,7 @@ import SKU from "../models/SKU";
 import Sale from "../models/Sale";
 import SaleItem from "../models/SaleItem";
 
-import { getAllPaymentMethods } from '../models/PaymentMethod';
+import { getAllPaymentMethods } from '../models/PaymentMethodViewModel';
 
 import { checkAuthToken } from "../middlewares/session-check";
 
