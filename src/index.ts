@@ -9,7 +9,7 @@ import bodyParser from 'body-parser';
 import path from 'path';
 import logger from 'morgan';
 import exphbs from 'express-handlebars';
-import dotenv, { config } from 'dotenv';
+import dotenv from 'dotenv';
 import session from 'express-session';
 
 dotenv.config();
@@ -20,7 +20,6 @@ import customerRouter from './routes/customer';
 import userRouter from './routes/user';
 import shoppingCartRouter from './routes/shopping-cart';
 import saleHistory from './routes/sales-history';
-import screenConfig from './routes/screen-config';
 
 const app = express();
 
@@ -63,7 +62,6 @@ app.use('/customer', customerRouter);
 app.use('/user', userRouter);
 app.use('/shopping-cart', shoppingCartRouter);
 app.use('/sales-history', saleHistory);
-app.use('/screen-config', screenConfig);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

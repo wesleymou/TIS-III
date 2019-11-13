@@ -49,8 +49,6 @@ router.post('/signin', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-    return res.status(501).send("Função não implementada.");
-    
     const user: User = req.body;
 
     if (!user.password || !user.login) {
