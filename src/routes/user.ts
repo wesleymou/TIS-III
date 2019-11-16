@@ -7,10 +7,11 @@ const service = new UserService();
 const router = Router();
 
 router.get('/signout', (req, res) => {
-    if (req.session && req.session['token']) {
-        req.session['token'] = null;
+    if (req.session) {
+        req.session.destroy(() => res.redirect('/'));
+    } else {
+        res.sendStatus(500);
     }
-    res.redirect('/');
 });
 
 router.post('/signin', async (req, res) => {
@@ -50,7 +51,7 @@ router.post('/signin', async (req, res) => {
 
 router.post('/', async (req, res) => {
     return res.status(501).send("Função não implementada.");
-    
+
     const user: User = req.body;
 
     if (!user.password || !user.login) {

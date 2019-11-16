@@ -11,6 +11,8 @@ import logger from 'morgan';
 import exphbs from 'express-handlebars';
 import dotenv, { config } from 'dotenv';
 import session from 'express-session';
+import redis from 'redis';
+import connectRedis from 'connect-redis';
 
 dotenv.config();
 
@@ -25,8 +27,18 @@ import screenConfig from './routes/screen-config';
 const app = express();
 
 // Setup session store
+const RedisStore = connectRedis(session);
+const client = redis.createClient({
+    host: process.env.REDIS_HOST,
+    port: Number(process.env.REDIS_PORT),
+    password: process.env.REDIS_PASS
+});
+
 app.use(session({
-    secret: 'siviglia'
+    store: new RedisStore({ client }),
+    secret: 'G$xBSHDNWea$L#USxmvVJtd4*6*N&KPu36wesqHLdqF#5zTY3-e9BjqaLYc^U!s8',
+    resave: false,
+    saveUninitialized: false,
 }));
 
 const publicDir = process.env.NODE_ENV === 'development'
@@ -52,7 +64,7 @@ app.engine('.hbs', hbs.engine);
 app.set('view engine', '.hbs');
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(logger('dev'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(publicDir));
