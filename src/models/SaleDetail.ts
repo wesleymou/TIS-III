@@ -1,7 +1,7 @@
 import Sale from "./Sale";
 
 class SaleDetail extends Sale {
-    CostumerName = "";
+    CustomerName = "";
 }
 
 export default SaleDetail;

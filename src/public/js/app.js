@@ -39,3 +39,8 @@ $(function () {
   });
 
 });
+
+function parseDate(date){
+  const [day, month, year, hour, min, sec] = date.toLocaleString().split(/[^0-9]/);
+  return `${year}-${month}-${day}T${hour}:${min}:${sec}`;
+}

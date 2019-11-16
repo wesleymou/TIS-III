@@ -49,9 +49,17 @@ class UserService implements CrudAsync<User> {
     throw new Error("Method not implemented.");
   }
   getAllAsync(): Promise<User[]> {
-    throw new Error("Method not implemented.");
+    const sql = `
+      select * from customer
+    `;
+    return new Promise((resolve, reject) => {
+      DataBase.query(sql, (err, results) => {
+        if (!err) resolve(results);
+        else reject(err);
+      });
+    });
   }
-  
+
   updateAsync(update: User): Promise<void> {
     const sql = `
         update user as u
