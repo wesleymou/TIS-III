@@ -14,8 +14,14 @@ type SaleDetailViewModel = SaleDetail & {
   paymentMethodFormat: PaymentMethod;
 };
 
-function createSaleDetailViewModel( saleDetail: SaleDetail): SaleDetailViewModel {
-  if (saleDetail.datePayment && saleDetail.datePayment.valueOf() < Date.now()) {
+function createSaleDetailViewModel(
+  saleDetail: SaleDetail
+): SaleDetailViewModel {
+  if (
+    saleDetail.saleStatus == 1 &&
+    saleDetail.datePayment &&
+    saleDetail.datePayment.valueOf() < Date.now()
+  ) {
     saleDetail.saleStatus = 4;
   }
 

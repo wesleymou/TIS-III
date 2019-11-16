@@ -2,6 +2,9 @@ import CrudAsync from "../models/CrudAsync";
 import Sale from "../models/Sale";
 import Database, { multipleStatementConnection } from "./Database";
 import SaleDetail from "../models/SaleDetail";
+import { resolve } from "dns";
+import { rejects } from "assert";
+import DateTimeUtil from "../utils/DateTimeUtil";
 
 class SaleService implements CrudAsync<Sale> {
   createAsync(sale: Sale): Promise<void> {
@@ -20,10 +23,10 @@ class SaleService implements CrudAsync<Sale> {
 
     const paymentDateParts = (sale.paymentDate || new Date())
       .toLocaleDateString()
-      .split('/');
+      .split("/");
 
     const [month, date, year] = paymentDateParts;
-    const paymentDate = [year, month, date].join('-');
+    const paymentDate = [year, month, date].join("-");
 
     const sql = `
       insert into sale (
@@ -65,15 +68,31 @@ class SaleService implements CrudAsync<Sale> {
     });
   }
 
-  getByIdAsync(id: number): Promise<Sale> {
-    throw new Error("Method not implemented.");
+  getByIdAsync(id: number): Promise<SaleDetail> {
+    const sql = `
+      SELECT s.*, ifnull(c.nickname, c.fullname) as customer_name
+      FROM sale s 
+      INNER JOIN customer c 
+      ON c.id = s.customer_id
+      WHERE s.id = ?
+      `;
+    return new Promise((resolve, reject) => {
+      Database.query(sql, id, (error, results) => {
+        if (!error) {
+          const [first] = results;
+          resolve(mapRowToSaleDetail(first));
+        } else {
+          reject(error);
+        }
+      });
+    });
   }
   getPageAsync(page: number): Promise<Sale[]> {
     throw new Error("Method not implemented.");
   }
   getAllAsync(): Promise<SaleDetail[]> {
     const sql = `
-      SELECT s.id, ifnull(c.nickname, c.fullname) as customer_name, s.sale_status_id, s.date_created, payment_date, s.discount, s.total_price, s.payment_method_id
+      SELECT s.*, ifnull(c.nickname, c.fullname) as customer_name
       FROM sale s 
       INNER JOIN customer c 
       ON c.id = s.customer_id
@@ -90,8 +109,20 @@ class SaleService implements CrudAsync<Sale> {
   }
 
   updateAsync(update: Sale): Promise<void> {
-    throw new Error("Method not implemented.");
+    var datePayment = DateTimeUtil.formatDateTimeDB(update.datePayment);
+
+    const sql = `UPDATE sale
+    SET payment_method_id=${update.paymentMethodId},sale_status_id=${update.saleStatus},payment_date=cast('${datePayment}' as datetime),customer_id=${update.customerId}
+    WHERE id=${update.id}`;
+
+    return new Promise((resolve, rejects) => {
+      Database.query(sql, (err, results) => {
+        if (!err) resolve();
+        else rejects(err);
+      });
+    });
   }
+
   removeAsync(id: number): Promise<void> {
     throw new Error("Method not implemented.");
   }
@@ -101,6 +132,8 @@ function mapRowToSaleDetail(row: any): SaleDetail {
   return Object.assign(new SaleDetail(), {
     id: row["id"],
     CustomerName: row["customer_name"],
+    customerId: row["customer_id"],
+    userId: row["user_id"],
     saleStatus: row["sale_status_id"],
     dateCreated: row["date_created"],
     datePayment: row["payment_date"],
