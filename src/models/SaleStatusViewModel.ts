@@ -16,7 +16,7 @@ export function getAllSaleStatus(): StatusClasses {
     2: {
       id: 2,
       name: "Cancelada",
-      className: "badge badge-secundary"
+      className: "badge badge-secondary"
     },
     3: {
       id: 3,

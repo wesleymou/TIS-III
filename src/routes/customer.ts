@@ -38,7 +38,7 @@ router.get('/search', async (req, res, next) => {
   }
 });
 
-router.get('/:id(\d+)', async (req, res, next) => {
+router.get('/:id(\\d+)', async (req, res, next) => {
   try {
     const id = Number(req.params.id);
 

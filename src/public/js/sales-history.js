@@ -27,7 +27,7 @@ $(function() {
     $.get(`/sales-history/get-sale/${$(this).data("id")}`)
       .then(res => {
         if (res.saleStatus != 2) {
-          alert("Impossível editar registros de vendas canceladas.")
+          alert("Impossível editar registros de vendas canceladas.");
         } else {
           let sale = res;
           $("#modal-edit #TituloModal")
@@ -52,7 +52,7 @@ $(function() {
         }
       })
       .fail(err => {
-        if (!alert(err.responseText)) window.location.reload();
+        noty(err.responseText, "error", () => window.location.reload());
       });
   });
 
@@ -77,7 +77,7 @@ $(function() {
   });
 
   $("#pop-up-save").click(function() {
-    if (confirm("Tem certeza que deseja salvar essas alterações?")) {
+    confirmDialog("Tem certeza que deseja salvar essas alterações?", () => {
       const sale = $("#modal-edit #TituloModal").data("sale");
 
       const query = {
@@ -99,36 +99,36 @@ $(function() {
         .fail(err => {
           if (!alert(err.responseText)) window.location.reload();
         });
-    }
+    });
   });
 
   $(document).on("click", "#confirm-action", function() {
-    if (
-      confirm(
-        `Tem certeza que deseja alterar o status da venda ${$(this).data(
-          "id"
-        )} para "Finalizada"`
-      )
-    )
-      $.post(`/sales-history/confirm-sale/${$(this).data("id")}`)
-        .then(res => {
-          if (!alert(res)) window.location.reload();
-        })
-        .fail(err => {
-          if (!alert(err.responseText)) window.location.reload();
-        });
+    confirmDialog(
+      `Tem certeza que deseja alterar o status da venda ${$(this).data(
+        "id"
+      )} para "Finalizada"`,
+      () => {
+        $.post(`/sales-history/confirm-sale/${$(this).data("id")}`)
+          .then(res => {
+            if (!alert(res)) window.location.reload();
+          })
+          .fail(err => {
+            if (!alert(err.responseText)) window.location.reload();
+          });
+      }
+    );
   });
 
   $(document).on("click", "#cancel-action", function() {
-    if (confirm("Tem certeza que deseja cancelar essa venda?")) {
+    confirmDialog("Tem certeza que deseja cancelar essa venda?", () => {
       $.post(`/sales-history/cancel-sale/${$(this).data("id")}`)
         .then(res => {
-          if (!alert(res)) window.location.reload();
+          noty(res, "success", () => window.location.reload());
         })
         .fail(err => {
-          if (!alert(err.responseText)) window.location.reload();
+          noty(err.responseText, "error", () => window.location.reload());
         });
-    }
+    });
   });
 });
 

@@ -13,11 +13,11 @@ $(function () {
     };
 
     if (!user.login) {
-      alert('Usuário inválido.');
+      noty('Usuário inválido.', 'error');
       return;
     }
     if (!user.password) {
-      alert('Senha inválida.');
+      noty('Senha inválida.', 'error');
       return;
     }
 
@@ -30,7 +30,7 @@ $(function () {
         window.location.assign('/shopping-cart')
       })
       .fail(function (jqXHR) {
-        alert('Erro: ' + jqXHR.responseText + '.');
+        noty('Erro: ' + jqXHR.responseText + '.', 'error');
       });
   }
 });
