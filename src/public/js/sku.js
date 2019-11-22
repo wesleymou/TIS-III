@@ -57,17 +57,12 @@ $(function () {
         setModalInputs(sku);
         $modal.modal('show');
       })
-      .catch(() => alert('Ocorreu um erro ao buscar os dados da unidade.'));
+      .catch(() => noty('Ocorreu um erro ao buscar os dados da unidade.', 'error'));
   });
 
   $('.remove-action').click(function () {
     const id = $(this).data('id');
-
-    const ok = confirm('Remover unidade?');
-
-    if (ok) {
-      deleteSku(id);
-    }
+    confirmDialog('Deseja realmente remover esta unidade?', () => deleteSku(id));
   });
 
   // Adiciona a unidade ao clicar no botão de adicionar
@@ -108,11 +103,10 @@ $(function () {
 function createSku(sku) {
   $.post('/product/' + productId, sku)
     .then(function (response) {
-      alert('Item cadastrado com sucesso!');
-      window.location.assign('/product/view/' + productId);
+      noty('Item cadastrado com sucesso!', 'success', () => window.location.reload());
     })
     .fail(function () {
-      alert('Ocorreu um erro, verifique as informações e tente novamente.');
+      noty('Ocorreu um erro, verifique as informações e tente novamente.', 'error');
     });
 }
 
@@ -129,11 +123,10 @@ function editSku(id, update) {
     contentType: 'application/json'
   })
     .then(function () {
-      alert('Unidade atualizada com sucesso!');
-      window.location.assign('/product/view/' + productId);
+      noty('Unidade atualizada com sucesso!', 'success', () => window.location.reload());
     })
     .fail(function () {
-      alert('Ocorreu um erro, verifique as informações e tente novamente.');
+      noty('Ocorreu um erro, verifique as informações e tente novamente.', 'error');
     });
 }
 
@@ -147,12 +140,10 @@ function deleteSku(id) {
     method: 'DELETE'
   })
     .then(function () {
-      alert('Unidade removida com successo.');
-      window.location.assign('/product/view/' + productId);
+      noty('Unidade removida com successo.', 'success', () => window.location.reload());
     })
-    .catch(function (err) {
-      alert('Ocorreu um erro :(');
-      console.error(err);
+    .catch(function () {
+      noty('Ocorreu um erro :(', 'error');
     });
 }
 
