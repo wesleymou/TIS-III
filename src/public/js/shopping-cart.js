@@ -23,7 +23,7 @@ $(function () {
 
     for (let i = 0; i < skus.length; i++) {
       if (skus[i].innerHTML == id) {
-        alert("Produto já adicionado");
+        noty("Produto já adicionado");
         return;
       }
     }
@@ -161,19 +161,16 @@ $(function () {
   $("#finalize").click(function () {
     const cart = getSaleInfo();
 
-    console.log(cart);
-
     if (cart.items.length) {
       $.post("/shopping-cart", cart, 'application/json')
         .then(() => {
-          alert('Venda cadastrada com sucesso!');
-          window.location.assign('/shopping-cart');
+          noty('Venda cadastrada com sucesso!', 'success', () => window.location.reload())
         })
         .catch(err => {
-          alert('Ocorreu um erro :(');
+          noty('Ocorreu um erro :(', 'error');
         });
     } else {
-      alert("Nenhum produto adicionado");
+      noty("Nenhum produto adicionado");
     }
   });
 });

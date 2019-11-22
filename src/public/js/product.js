@@ -29,11 +29,7 @@ $(function () {
   $('.remove-action').click(function () {
     const id = $(this).data('id');
 
-    const ok = confirm('Remover produto?');
-
-    if (ok) {
-      deleteProduct(id);
-    }
+    confirmDialog('Deseja realmente remover este produto?', () => deleteProduct(id));
   });
 
   // Muda o texto do modal para cadastrar e abre o modal ao clicar no botão de adicionar
@@ -65,7 +61,7 @@ $(function () {
 
     $.get('/product/' + id)
       .then((product) => setModalInputs(product))
-      .catch((err) => alert('Ocorreu um erro ao buscar os dados do produto.'));
+      .catch((err) => noty('Ocorreu um erro ao buscar os dados do produto.', 'error'));
   });
 
   // Limpa os campos ao fechar o modal de cadastro
@@ -81,11 +77,10 @@ $(function () {
 function createProduct(product) {
   $.post('/product', product)
     .then(function () {
-      alert('Produto cadastrado com sucesso!');
-      window.location.assign('/product');
+      noty('Produto cadastrado com sucesso!', 'success', () => window.location.reload());
     })
     .fail(function () {
-      alert('Ocorreu um erro, verifique as informações e tente novamente.');
+      noty('Ocorreu um erro, verifique as informações e tente novamente.', 'error');
     });
 }
 
@@ -102,11 +97,10 @@ function editProduct(id, product) {
     contentType: 'application/json'
   })
     .then(function () {
-      alert('Produto atualizado com sucesso!');
-      window.location.assign('/product');
+      noty('Produto atualizado com sucesso!', 'success', () => window.location.reload());
     })
     .fail(function () {
-      alert('Ocorreu um erro, verifique as informações e tente novamente.');
+      noty('Ocorreu um erro, verifique as informações e tente novamente.', 'error');
     });
 }
 
@@ -120,10 +114,9 @@ function deleteProduct(id) {
     method: 'DELETE'
   })
     .then(() => {
-      alert('Produto removido com sucesso!');
-      window.location.assign('/product');
+      noty('Produto removido com sucesso!', 'success', () => window.location.reload());
     })
-    .catch(() => alert('Ocorreu um erro ao tentar remover o produto.'));
+    .catch(() => noty('Ocorreu um erro ao tentar remover o produto.', 'error'));
 }
 
 /**

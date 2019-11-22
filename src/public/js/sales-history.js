@@ -1,7 +1,7 @@
-$(function() {
+$(function () {
   $("#tabelaVendas").dataTable();
 
-  $(".products-detail-action").click(function() {
+  $(".products-detail-action").click(function () {
     $.get(`/sales-history/sale-items/${$(this).data("id")}`).then(res => {
       $("#TituloModal").html(res[0].saleId);
       res.forEach(row => {
@@ -19,7 +19,7 @@ $(function() {
     });
   });
 
-  $(".edit-action").click(function() {
+  $(".edit-action").click(function () {
     $.get(`/sales-history/get-sale/${$(this).data("id")}`)
       .then(res => {
         let sale = res;
@@ -44,11 +44,11 @@ $(function() {
         $("#modal-edit").modal("show");
       })
       .fail(err => {
-        if (!alert(err.responseText)) window.location.reload();
+        noty(err.responseText, 'error', () => window.location.reload());
       });
   });
 
-  $("#input-customer, #input-status, #input-payment").click(function() {
+  $("#input-customer, #input-status, #input-payment").click(function () {
     const key = $(this).data("key");
     if (key == "customer") {
       $.get("/sales-history/get-customer").then(res => {
@@ -68,7 +68,7 @@ $(function() {
     }
   });
 
-  $("#pop-up-save").click(function() {
+  $("#pop-up-save").click(function () {
     const sale = $("#modal-edit #TituloModal").data("sale");
 
     const query = {
@@ -79,14 +79,14 @@ $(function() {
       datePayment: $("#input-data-payment").val().substr(0, sale.datePayment.length)
     };
 
-    const saleUpdate = Object.assign(sale,query);
+    const saleUpdate = Object.assign(sale, query);
 
-    $.post('/sales-history/update-sale',saleUpdate)
+    $.post('/sales-history/update-sale', saleUpdate)
       .then(res => {
-        if (!alert(res)) window.location.reload();
+        noty(res, 'success', () => window.location.reload());
       })
       .fail(err => {
-        if (!alert(err.responseText)) window.location.reload();
+        noty(err.responseText, 'error', () => window.location.reload());
       });
   });
 });
@@ -139,7 +139,7 @@ function preencherModalPopUp(head, body) {
       // searching: true
     });
 
-  $(".pop-up-action").click(function() {
+  $(".pop-up-action").click(function () {
     alterarDados($(this).data("id"), $(this).data("key"), $(this).html());
   });
 }

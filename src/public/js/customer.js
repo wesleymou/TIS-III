@@ -59,16 +59,15 @@ $(function () {
 
     $.get('/customer/' + id)
       .then((customer) => setModalInputs(customer))
-      .catch((err) => alert('Ocorreu um erro ao buscar os dados do usuário.'));
+      .catch((err) => noty('Ocorreu um erro ao buscar os dados do usuário.', 'error'));
   });
 
   // Remove o usuário ao clicar no botão de remover na lista
   $('.remove-action').click(function () {
-    const remove = confirm('Deseja realmente remover este cliente?');
-    if (remove) {
+    confirmDialog('Deseja realmente remover este cliente?', () => {
       const id = $(this).data('id');
       deleteCustomer(id);
-    }
+    });
   });
 
   // Limpa os campos ao fechar o modal de cadastro
@@ -82,13 +81,13 @@ $(function () {
  * @param {object} customer Informações do usuário
  */
 function createCustomer(customer) {
+  noty('Cadastrando cliente');
   $.post('/customer', customer)
     .then(function () {
-      alert('Cliente cadastrado com sucesso!');
-      window.location.assign('/customer');
+      noty('Cliente cadastrado com sucesso!', 'success', () => window.location.reload());
     })
     .fail(function () {
-      alert('Ocorreu um erro, verifique as informações e tente novamente.');
+      noty('Ocorreu um erro, verifique as informações e tente novamente.', 'error');
     });
 }
 
@@ -105,11 +104,10 @@ function editCustomer(id, customer) {
     contentType: 'application/json'
   })
     .then(function () {
-      alert('Cliente atualizado com sucesso!');
-      window.location.assign('/customer');
+      noty('Cliente atualizado com sucesso!', 'success', () => window.location.reload());
     })
     .fail(function () {
-      alert('Ocorreu um erro, verifique as informações e tente novamente.');
+      noty('Ocorreu um erro, verifique as informações e tente novamente.', 'error');
     });
 }
 
@@ -123,10 +121,9 @@ function deleteCustomer(id) {
     method: 'DELETE'
   })
     .then(() => {
-      alert('Cliente removido com sucesso!');
-      window.location.assign('/customer');
+      noty('Cliente removido com sucesso!', 'success', () => window.location.reload());
     })
-    .catch(() => alert('Ocorreu um erro ao tentar remover o cliente.'));
+    .catch(() => noty('Ocorreu um erro ao tentar remover o cliente.', 'error'));
 }
 
 /**
