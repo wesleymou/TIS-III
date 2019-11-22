@@ -1,10 +1,31 @@
 import SKU from "../models/SKU";
 import Database from "./Database";
 import CrudAsync from "../models/CrudAsync";
-import { resolve } from "path";
-import { MysqlError } from "mysql";
+import { DbField, DbRowMapper } from "../models/DbRowMapper";
 
-class SKUService implements CrudAsync<SKU> {
+/**
+ * Define a relação entre nome do campo na model
+ * e o nome do campo no banco de dados.
+ */
+const fieldMap: DbField[] = [
+  { modelKey: "id", dbRow: "id" },
+  { modelKey: "name", dbRow: "name" },
+  { modelKey: "code", dbRow: "code" },
+  { modelKey: "description", dbRow: "description" },
+  { modelKey: "price", dbRow: "price" },
+  { modelKey: "quantityAvailable", dbRow: "quantity_available" },
+  { modelKey: "quantityPurchased", dbRow: "quantity_purchased" },
+  { modelKey: "productId", dbRow: "product_id" },
+  { modelKey: "dateCreated", dbRow: "date_created" },
+  { modelKey: "expirationDate", dbRow: "date_expires" }
+]
+
+class SKUService extends DbRowMapper<SKU> implements CrudAsync<SKU> {
+
+  getFields(): DbField[] {
+    return fieldMap;
+  }
+
   createAsync(sku: SKU): Promise<void> {
     return new Promise((resolve, reject) => {
       Database.query(
@@ -34,8 +55,22 @@ class SKUService implements CrudAsync<SKU> {
   }
 
   getByIdAsync(id: number): Promise<SKU> {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve, reject) => {
+      const sql = `
+        select * from sku where id = ?;`;
+
+      Database.query(sql, id, (err, results) => {
+        if (!err) {
+          const [first] = results;
+          const product = this.mapDbRowToModel(first);
+          resolve(product);
+        } else {
+          reject(err);
+        }
+      });
+    });
   }
+
   getPageAsync(page: number): Promise<SKU[]> {
     throw new Error("Method not implemented.");
   }
@@ -46,7 +81,7 @@ class SKUService implements CrudAsync<SKU> {
 
       Database.query(sql, (err: Error, result: any[]) => {
         if (!err) {
-          const sku = result.map(mapRowToSku);
+          const sku = result.map(this.mapDbRowToModel);
           resolve(sku);
         } else {
           reject(err);
@@ -69,7 +104,7 @@ class SKUService implements CrudAsync<SKU> {
 
       Database.query(sql, id, (err, result: any[]) => {
         if (!err) {
-          const sku = result.map(mapRowToSku);
+          const sku = result.map(this.mapDbRowToModel);
           resolve(sku);
         } else {
           reject(err);
@@ -83,12 +118,23 @@ class SKUService implements CrudAsync<SKU> {
       const sql = `SELECT * from sku WHERE id IN(${ids.join(',')});`;
       Database.query(sql, (err, results: any[]) => {
         if (!err) {
-          const sku = results.map(mapRowToSku);
+          const sku = results.map(this.mapDbRowToModel);
           resolve(sku);
         } else {
           reject(err);
         }
       });
+    });
+  }
+
+  updateWithIdAsync(id: number, update: any) {
+    const fields = this.mapObjectToDbRow(update)
+
+    const sql = `update sku set ? where id = ${id}`;
+    return new Promise((resolve: Function, reject: Function) => {
+      Database.query(sql, fields)
+        .on('end', () => resolve())
+        .on('error', e => reject(e));
     });
   }
 
@@ -116,7 +162,7 @@ class SKUService implements CrudAsync<SKU> {
 
       Database.query(sql, productId, (err, results: any[]) => {
         if (!err) {
-          const skuList = results.map(mapRowToSku);
+          const skuList = results.map(this.mapDbRowToModel);
           resolve(skuList);
         } else {
           reject(err);
@@ -124,21 +170,6 @@ class SKUService implements CrudAsync<SKU> {
       });
     });
   }
-}
-
-function mapRowToSku(row: any): SKU {
-  return {
-    id: row["id"],
-    name: row["name"],
-    code: row["code"],
-    description: row["description"],
-    price: row["price"],
-    quantityAvailable: row["quantity_available"],
-    quantityPurchased: row["quantity_purchased"],
-    productId: row["product_id"],
-    dateCreated: row["date_created"],
-    expirationDate: row["date_expires"]
-  };
 }
 
 export default SKUService;

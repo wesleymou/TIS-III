@@ -52,6 +52,16 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
+router.get('/sku/:id', async (req, res, next) => {
+  try {
+    const id: number = Number(req.params.id);
+    const sku = await skuService.getByIdAsync(id);
+    res.json(sku);
+  } catch (err) {
+    next(createError(500, err));
+  }
+});
+
 // Render sku list
 router.get('/view/:id', async (req, res, next) => {
   try {
@@ -153,6 +163,43 @@ router.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
+// Edit sku
+router.put('/sku/:id', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = Number(req.params.id);
+    const update = req.body;
+
+    const sku = await skuService.getByIdAsync(id);
+
+    if (!sku) {
+      return res.sendStatus(404);
+    }
+
+    const available = Number(update.quantityAvailable);
+
+    if (!isNaN(available)) {
+
+      if (available > sku.quantityPurchased) {
+        update.quantityPurchased = available;
+      }
+
+      update.quantityAvailable = available;
+    }
+
+    const expDate = new Date(update.expirationDate);
+
+    if (expDate.valueOf()) {
+      update.expirationDate = expDate;
+    }
+
+    await skuService.updateWithIdAsync(id, update);
+
+    res.sendStatus(200);
+  } catch (err) {
+    next(createError(500, err));
+  }
+});
+
 /**
  * Valida e converte um objeto para o tipo SKU.
  * Retorna o sku ou null, se o objeto for inválido.
@@ -164,11 +211,6 @@ function normalizeSku(obj: any): SKU | null {
     quantityAvailable,
     expirationDate
   } = obj;
-
-  console.log(price,
-    quantityAvailable,
-    expirationDate);
-
 
   if (!Number(quantityAvailable) || !Number(price)) {
     return null;
