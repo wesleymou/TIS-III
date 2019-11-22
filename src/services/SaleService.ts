@@ -113,11 +113,44 @@ class SaleService implements CrudAsync<Sale> {
 
     const sql = `UPDATE sale
     SET payment_method_id=${update.paymentMethodId},sale_status_id=${update.saleStatus},payment_date=cast('${datePayment}' as datetime),customer_id=${update.customerId}
-    WHERE id=${update.id}`;
+    WHERE id=${update.id} AND sale_status_id!=2`;
 
     return new Promise((resolve, rejects) => {
       Database.query(sql, (err, results) => {
         if (!err) resolve();
+        else rejects(err);
+      });
+    });
+  }
+
+  updateConfirmAsync(id: number): Promise<void> {
+    const sql = `UPDATE sale
+    SET sale_status_id=3
+    WHERE id=? AND sale_status_id!=2`;
+    return new Promise((resolve, rejects) => {
+      Database.query(sql, id, (err, res) => {
+        if (!err) resolve(res);
+        else rejects(err);
+      });
+    });
+  }
+
+  updateCancelAsync(id: number): Promise<void> {
+    const sql = `UPDATE sku s
+    INNER JOIN sale_item si
+    ON si.sku_id=s.id
+    INNER JOIN sale
+    ON sale.id=si.sale_id
+    SET s.quantity_purchased=(s.quantity_purchased-si.quantity), s.quantity_available=(s.quantity_available+si.quantity)
+    WHERE si.sale_id=${id} AND sale.sale_status_id!=2;
+    
+    UPDATE sale s
+    SET s.sale_status_id=2
+    WHERE s.id=${id} AND s.sale_status_id!=2;`;
+    
+    return new Promise((resolve, rejects) => {
+      Database.query(sql, (err, res) => {
+        if (!err) resolve(res);
         else rejects(err);
       });
     });

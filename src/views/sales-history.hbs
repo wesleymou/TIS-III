@@ -19,7 +19,7 @@
 					<th>Tipo pag.</th>
 					<th>Status</th>
 					<th>Produtos</th>
-					<th style="width:100px;" class="text-center">Ação</th>
+					<th>Ação</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -43,10 +43,21 @@
 					<td class="sale-status"><span class="{{statusFormat.className}}">{{statusFormat.name}}</span></td>
 					<td><a href="javascript:" class="text-success products-detail-action" data-id="{{id}}">Produtos</a>
 					</td>
-					<td><i class="oi oi-pencil text-primary table-action edit-action" data-id="{{id}}"
-							title="Editar registro de venda"></i>
-						<i class="oi oi-x text-danger table-action remove-action" data-id="{{id}}"
-							title="Excluir registro de venda"></i></td>
+					<td>
+						<div class="dropdown">
+							<a class="btn btn-info" data-toggle="dropdown">
+								<i class="oi oi-menu"></i>
+							</a>
+							<div class="dropdown-menu">
+								<i id="confirm-action" class="oi oi-check text-success table-action"
+									data-id="{{id}}" title="Confirmar registro de venda"></i>
+								<i id="edit-action" class="oi oi-pencil text-primary table-action"
+									data-id="{{id}}" title="Editar registro de venda"></i>
+								<i id="cancel-action" class="oi oi-x text-danger table-action"
+									data-id="{{id}}" title="Excluir registro de venda"></i>
+							</div>
+						</div>
+					</td>
 				</tr>
 				{{/each }}
 			</tbody>
@@ -101,7 +112,8 @@
 					<div class="row">
 						<span class="col-12">Cliente: <a data-key="customer" id="input-customer" href="#"></a></span>
 						<span class="col-12">Status: <a data-key="status" id="input-status" href="#"></a></span>
-						<span class="col-12">Forma de pagamento: <a data-key="payment" id="input-payment" href="#"></a></span>
+						<span class="col-12">Forma de pagamento: <a data-key="payment" id="input-payment"
+								href="#"></a></span>
 						<small class="text-info text-right col-12">
 							<i class="oi oi-info"></i>
 							(Clique no item que deseja alterar)
@@ -125,27 +137,27 @@
 </section>
 
 <div class="modal" id="modal-pop-up" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-sm" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title"></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <table id="modal-table" class="table">
+	<div class="modal-dialog modal-sm" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title"></h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<table id="modal-table" class="table">
 					<thead id="modal-table-head">
 					</thead>
 					<tbody id="modal-table-body">
 					</tbody>
 				</table>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-      </div>
-    </div>
-  </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+			</div>
+		</div>
+	</div>
 </div>
 
 <script src="/js/sales-history.js"></script>

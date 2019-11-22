@@ -100,13 +100,39 @@ router.get("/get-sales-status", async (req, res) => {
 router.post("/update-sale", async (req, res) => {
   try {
     const { body } = req;
-    
+
     const sale: Sale = Object.assign(new Sale(), body);
-    
+
     saleService.updateAsync(sale);
     res.status(200).send("Registro atualizado com sucesso");
   } catch (error) {
     res.status(400).send("Ocorreu um erro. Tente novamente." + error);
+  }
+});
+
+router.post("/confirm-sale/:query", async (req, res, next) => {
+  try {
+    const { query } = req.params;
+    saleService.updateConfirmAsync(Number.parseInt(query));
+    res.status(200).send("Registro de venda atualizado");
+  } catch (error) {
+    res.status(400).send("Ocorreu um erro. Tente novamente.");
+  }
+});
+
+router.post("/cancel-sale/:query", async (req, res, next) => {
+  try {
+    throw new Error("Not implemented");
+    const { query } = req.params;
+    const items: SaleItem[] = query
+      ? await saleItemService.getAllByIdAsync(Number.parseInt(query))
+      : [];
+
+    // saleItemService.notImplemented(items);
+
+    res.status(200).send("Status da venda alterada para Cancelada");
+  } catch (error) {
+    res.status(400).send(error);
   }
 });
 
