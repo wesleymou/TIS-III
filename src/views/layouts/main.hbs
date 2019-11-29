@@ -1,4 +1,10 @@
 {{> header }}
-{{> navbar }}
-{{{ body }}}
+
+<div class="d-flex app">
+    {{> sidebar }}
+    <main class="main">
+        {{{ body }}}
+    </main>
+</div>
+
 {{> footer }}

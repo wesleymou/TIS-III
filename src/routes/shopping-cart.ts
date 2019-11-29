@@ -13,6 +13,7 @@ import SaleItem from "../models/SaleItem";
 import { getAllPaymentMethods } from '../models/PaymentMethodViewModel';
 
 import { checkAuthToken } from "../middlewares/session-check";
+import ShoppingCartViewModel from "../models/ShoppingCartViewModel";
 
 const anonId = Number(process.env.ANON_ID) || 2;
 
@@ -24,10 +25,13 @@ const router = Router();
 router.use(checkAuthToken);
 
 router.get("/", async (req, res) => {
-  res.render("shopping-cart", {
-    title: "Figaro - Registrar Venda",
-    paymentMethods: getAllPaymentMethods()
-  });
+  const viewModel = new ShoppingCartViewModel();
+
+  viewModel.title = 'Figaro - Registrar Venda';
+  viewModel.paymentMethods = getAllPaymentMethods();
+  viewModel.setActiveMenu('/shopping-cart');
+
+  res.render("shopping-cart", viewModel);
 });
 
 router.post("/", async (req, res, next) => {

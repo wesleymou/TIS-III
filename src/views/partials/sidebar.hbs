@@ -1,0 +1,39 @@
+<div class="sidebar">
+    <div class="sidebar-logo">
+        <div class="sidebar-menu-item">
+            <a href="/">
+                <img src="/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
+                <strong class="app-name">Figaro</strong>
+            </a>
+        </div>
+    </div>
+    <div class="sidebar-menu">
+        {{#each menu}}
+
+        <div class="sidebar-menu-item {{#if active}} active {{/if}}">
+            <a href="{{link}}">
+                {{#if icon}}
+                <i class="oi oi-{{icon}}"></i>
+                {{/if}}
+
+                {{name}}
+            </a>
+        </div>
+
+        {{/each}}
+    </div>
+    <div class="sidebar-bottom">
+        <div class="sidebar-menu-item">
+            <a class="" href="/screen-config">
+                <i class="oi oi-cog text-secondary" title="Abrir configurações"></i>
+                Configurar
+            </a>
+        </div>
+        <div class="sidebar-menu-item">
+            <a class="text-danger" href="/user/signout">
+                <i class="oi oi-account-logout"></i>
+                Sair
+            </a>
+        </div>
+    </div>
+</div>

@@ -21,7 +21,10 @@ router.get('/', async (req, res, next) => {
 
     const viewModel = new CustomerListViewModel(customers);
 
-    res.render('customer-list', { title: 'Figaro - Clientes', ...viewModel });
+    viewModel.title = 'Figaro - Clientes';
+    viewModel.setActiveMenu('/customer');
+
+    res.render('customer-list', viewModel);
   } catch (err) {
     next(createError(500, err));
   }

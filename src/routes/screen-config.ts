@@ -16,9 +16,9 @@ router.use(checkAuthToken);
 router.get("/", (req, res, next) => {
   try {
     res.render("screen-config", {
-      tittle: "Figaro - Configurações"
+      title: "Figaro - Configurações"
     });
-  } catch (error) {}
+  } catch (error) { }
 });
 
 router.post("/change-password", async (req, res, next) => {
@@ -26,7 +26,7 @@ router.post("/change-password", async (req, res, next) => {
     const { oldPassword } = req.body;
     const { newPassword } = req.body;
 
-    if(!oldPassword && !newPassword){
+    if (!oldPassword && !newPassword) {
       res.status(400).send("Por favor, complete os dois campos");
     }
 

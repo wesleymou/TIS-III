@@ -29,9 +29,7 @@ const app = express();
 // Setup session store
 const RedisStore = connectRedis(session);
 const client = redis.createClient({
-    host: process.env.REDIS_HOST,
-    port: Number(process.env.REDIS_PORT),
-    password: process.env.REDIS_PASS
+    url: process.env.REDIS_URL
 });
 
 app.use(session({
