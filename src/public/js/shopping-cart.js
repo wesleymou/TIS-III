@@ -186,17 +186,6 @@ function atualizarValores() {
 }
 
 /**
- * Formata um número para o tipo moeda (Real) na cultura pt-br
- * @param {number} num Valor a ser formatado
- */
-function formatMoney(num) {
-  return Number(num).toLocaleString('pt-br', {
-    style: 'currency',
-    currency: 'BRL'
-  });
-}
-
-/**
  * Retorna as informações da venda
  */
 function getSaleInfo() {

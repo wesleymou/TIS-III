@@ -8,6 +8,7 @@ import { createViewModel as createProductViewModel } from '../models/ProductView
 import SKU from '../models/SKU';
 import { checkAuthToken } from '../middlewares/session-check';
 import Customer from '../models/Customer';
+import SKUListViewModel from '../models/SKUListViewModel';
 
 const productService = new ProductService();
 const skuService = new SKUService();
@@ -27,7 +28,10 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
 
     const viewModel = new ProductListViewModel(products);
 
-    res.render('product-list', { title: 'Figaro - Estoque', ...viewModel });
+    viewModel.title = 'Figaro - Estoque';
+    viewModel.setActiveMenu('/product');
+
+    res.render('product-list', viewModel);
   } catch (err) {
     next(createError(500, err));
   }
@@ -74,15 +78,16 @@ router.get('/view/:id', async (req, res, next) => {
     }
 
     const skuList = await skuService.getByProductAsync(id);
-    const viewModel = new ProductListViewModel(skuList);
+    const listModel = new ProductListViewModel(skuList);
+    const viewModel = new SKUListViewModel();
 
-    product.SKUList = skuList;
+    viewModel.title = 'Figaro - Estoque';
+    viewModel.skus = listModel.products;
+    viewModel.product = product;
 
-    res.render('sku-list', {
-      title: 'Figaro - Estoque',
-      product: product,
-      skus: viewModel.products
-    });
+    viewModel.setActiveMenu('/product');
+
+    res.render('sku-list', viewModel);
   } catch (err) {
     next(createError(500, err));
   }

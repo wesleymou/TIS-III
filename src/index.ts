@@ -17,6 +17,7 @@ import connectRedis from 'connect-redis';
 dotenv.config();
 
 import indexRouter from './routes/index';
+import dashboardRouter from './routes/dashboard';
 import productRouter from './routes/product';
 import customerRouter from './routes/customer';
 import userRouter from './routes/user';
@@ -29,9 +30,7 @@ const app = express();
 // Setup session store
 const RedisStore = connectRedis(session);
 const client = redis.createClient({
-    host: process.env.REDIS_HOST,
-    port: Number(process.env.REDIS_PORT),
-    password: process.env.REDIS_PASS
+    url: process.env.REDIS_URL
 });
 
 app.use(session({
@@ -70,6 +69,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(publicDir));
 
 app.use('/', indexRouter);
+app.use('/dashboard', dashboardRouter);
 app.use('/product', productRouter);
 app.use('/customer', customerRouter);
 app.use('/user', userRouter);

@@ -1,5 +1,5 @@
 import CrudAsync from "../models/CrudAsync";
-import Customer from "../models/Customer";
+import Customer, { mapRowToCustomer } from "../models/Customer";
 import Database from './Database';
 
 const anonId = process.env.ANON_ID || 2;
@@ -95,18 +95,6 @@ class CustomerService implements CrudAsync<Customer> {
         .on('end', () => resolve())
         .on('error', e => reject(e));
     });
-  }
-}
-
-function mapRowToCustomer(row: any): Customer {
-  return {
-    id: row['id'] || 0,
-    fullName: row['fullname'] || '',
-    nickname: row['nickname'] || '',
-    address: row['address'] || '',
-    phone: row['phone'] || '',
-    email: row['email'] || '',
-    dateCreated: row['date_created']
   }
 }
 

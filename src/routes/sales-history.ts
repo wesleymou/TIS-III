@@ -17,6 +17,7 @@ import { getAllSaleStatus } from "../models/SaleStatusViewModel";
 
 import { checkAuthToken } from "../middlewares/session-check";
 import Sale from "../models/Sale";
+import { SaleListViewModel } from "../models/SaleListViewModel";
 
 const saleService = new SaleService();
 const saleItemService = new SaleItemService();
@@ -33,10 +34,14 @@ router.get("/", async (req, res, next) => {
       createSaleDetailViewModel
     );
 
-    res.render("sales-history", {
-      title: "Figaro - Historico de vendas",
-      salesDetail: salesDetail
-    });
+    const viewModel = new SaleListViewModel();
+
+    viewModel.title = 'Figaro - Historico de vendas';
+    viewModel.salesDetail = salesDetail;
+
+    viewModel.setActiveMenu('/sales-history');
+
+    res.render("sales-history", viewModel);
   } catch (error) {
     next(createError(500, error));
   }
