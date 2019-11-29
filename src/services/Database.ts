@@ -1,19 +1,9 @@
 import mysql, { Pool } from 'mysql';
 
-const pool: Pool = mysql.createPool({
-    connectionLimit: 100,
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME,
-});
+const pool: Pool = mysql
+    .createPool(process.env.JAWSDB_MARIA_URL + '?connectionLimit=100');
 
-export const multipleStatementConnection = () => mysql.createConnection({
-    multipleStatements: true,
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME,
-});
+export const multipleStatementConnection = () => mysql
+    .createConnection(process.env.JAWSDB_MARIA_URL + '?multipleStatements=true');
 
 export default pool;
