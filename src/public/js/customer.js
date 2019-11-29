@@ -1,4 +1,5 @@
 $(function () {
+  $('#tabelaClientes').DataTable();
 
   /**
    * Itens pesquisados na query string
@@ -35,14 +36,38 @@ $(function () {
       address: $('#addressFormInput').val(),
     };
 
-    $.post('/customer', customer)
-      .then(function (response) {
-        alert('Cliente cadastrado com sucesso!');
-        window.location.assign('/customer');
-      })
-      .fail(function () {
-        alert('Ocorreu um erro, verifique as informações e tente novamente.');
-      });
+    const id = $('#idFormInput').val();
+
+    if (id) {
+      editCustomer(id, customer);
+    } else {
+      createCustomer(customer);
+    }
+  });
+
+  // Muda o texto do modal para cadastrar e abre o modal ao clicar no botão de adicionar
+  $('.btn-create').click(function () {
+    $('#modal-create-customer').find('h2').text('Cadastrar cliente');
+    $('#modal-create-customer').modal('show');
+  });
+
+  // Abre o modal de editar ao clicar no botão de editar na lista
+  $('.edit-action').click(function () {
+    const id = $(this).data('id');
+
+    $('#modal-create-customer').find('h2').text('Editar cliente');
+
+    $.get('/customer/' + id)
+      .then((customer) => setModalInputs(customer))
+      .catch((err) => noty('Ocorreu um erro ao buscar os dados do usuário.', 'error'));
+  });
+
+  // Remove o usuário ao clicar no botão de remover na lista
+  $('.remove-action').click(function () {
+    confirmDialog('Deseja realmente remover este cliente?', () => {
+      const id = $(this).data('id');
+      deleteCustomer(id);
+    });
   });
 
   // Limpa os campos ao fechar o modal de cadastro
@@ -50,3 +75,68 @@ $(function () {
     $(this).find('input').val('');
   });
 });
+
+/**
+ * Cria um cliente a partir de um objeto
+ * @param {object} customer Informações do usuário
+ */
+function createCustomer(customer) {
+  noty('Cadastrando cliente');
+  $.post('/customer', customer)
+    .then(function () {
+      noty('Cliente cadastrado com sucesso!', 'success', () => window.location.reload());
+    })
+    .fail(function () {
+      noty('Ocorreu um erro, verifique as informações e tente novamente.', 'error');
+    });
+}
+
+/**
+ * Edita um usuário a partir de um objeto com as alterações
+ * @param {number} id Id do cliente
+ * @param {any} customer Informações do cliente para editar
+ */
+function editCustomer(id, customer) {
+  $.ajax({
+    url: '/customer/' + id,
+    method: 'PUT',
+    data: JSON.stringify(customer),
+    contentType: 'application/json'
+  })
+    .then(function () {
+      noty('Cliente atualizado com sucesso!', 'success', () => window.location.reload());
+    })
+    .fail(function () {
+      noty('Ocorreu um erro, verifique as informações e tente novamente.', 'error');
+    });
+}
+
+/**
+ * Remove o cliente a partir de um id
+ * @param {number} id Id do cliente
+ */
+function deleteCustomer(id) {
+  $.ajax({
+    url: '/customer/' + id,
+    method: 'DELETE'
+  })
+    .then(() => {
+      noty('Cliente removido com sucesso!', 'success', () => window.location.reload());
+    })
+    .catch(() => noty('Ocorreu um erro ao tentar remover o cliente.', 'error'));
+}
+
+/**
+ * Atualiza os inputs do modal com os dados do cliente
+ * @param {object} customer Dados do cliente
+ */
+function setModalInputs(customer) {
+  $('#idFormInput').val(customer.id);
+  $('#nicknameFormInput').val(customer.nickname);
+  $('#nameFormInput').val(customer.fullName);
+  $('#emailFormInput').val(customer.email);
+  $('#phoneFormInput').val(customer.phone);
+  $('#addressFormInput').val(customer.address);
+
+  $('#modal-create-customer').modal('show');
+}

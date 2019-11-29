@@ -1,0 +1,124 @@
+<section class="mt-3">
+    <div class="container">
+        <h1>Estoque do produto - {{ product.name }}</h1>
+        <p class="text-secondary">Cadastro de produtos no estoque</p>
+    </div>
+</section>
+
+<section class="my-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-9 col-lg-3">
+                <div class="input-group">
+                    <input id="query-input" name="query-input" type="text" class="form-control"
+                        placeholder="Pesquisar...">
+                    <div class="input-group-append">
+                        <button id="btn-search" class="btn btn-primary">
+                            <span class="oi oi-magnifying-glass"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-success btn-add-sku" title="Cadastrar cliente">Adicionar estoque</button>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="my-5">
+    <div class="container">
+        <table class="table" id="tabelaProdutos">
+            <thead class="thead-light">
+                <tr>
+                    <th>SKU</th>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Valor</th>
+                    <th>Data compra</th>
+                    <th>Quant. comprada</th>
+                    <th>Data de validade</th>
+                    <th>Quant. disp.</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                {{#unless skus.length }}
+                <td colspan="8">
+                    Nenhuma unidade cadastrada para este produto.
+                    Clique no botão acima para adicionar uma unidade de estoque.
+                </td>
+                {{/unless}}
+
+                {{#each skus}}
+                <tr>
+                    <td>{{id}}</td>
+                    <td>{{name}}</td>
+                    <td>{{description}}</td>
+                    <td>{{priceFormat}}</td>
+                    <td>{{dateCreatedFormat}}</td>
+                    <td>{{quantityPurchased}}</td>
+                    <td>{{expirationDateFormat}}</td>
+                    <td>{{quantityAvailable}}</td>
+                    <td>
+                        <i class="oi oi-pencil text-primary table-action edit-action" data-id="{{id}}"
+                            title="Editar unidade"></i>
+                        <i class="oi oi-trash text-danger table-action remove-action" data-id="{{id}}"
+                            title="Excluir unidade"></i>
+                    </td>
+                </tr>
+                {{/each }}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<div class="modal modal-fade" id="modal-sku">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h2>Adicionar estoque</h2>
+                <p class="text-secondary">
+                    Insira as informações do novo lote de produtos
+                </p>
+                <form class="my-3">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="priceFormInput">Preço por unidade R$</label>
+                                <input type="number" class="form-control" id="priceFormInput" placeholder="">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="quantityFormInput">Quantidade</label>
+                                <input type="number" class="form-control" id="quantityFormInput" placeholder="">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="expirationDateFormInput">Data de validade</label>
+                                <input type="date" class="form-control" id="expirationDateFormInput">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="check-non-expiration">
+                                    <label class="form-check-label" for="check-non-expiration">
+                                        Não possui validade
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="idFormInput">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn mr-2 text-primary">Cancelar</button>
+                <button type="button" id="btn-save" class="btn btn-success">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="productId" value="{{ product.id }}">
+
+<script async defer src="/js/sku.js"></script>

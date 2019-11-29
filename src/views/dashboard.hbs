@@ -1,0 +1,95 @@
+<h1>Figaro - Barbershop Manager</h1>
+
+<p class="text-secondary">Status da barbearia</p>
+
+<section class="py-5">
+    <div class="row">
+        <div class="col-4 text-center">
+            <h2 class="product-counter">0</h2>
+            <div class="mb-3">Produtos cadastrados</div>
+            <div class="mb-3">
+                <a href="/product">
+                    <small>Ver</small>
+                </a>
+            </div>
+        </div>
+        <div class="col-4 text-center">
+            <h2 class="customer-counter">0</h2>
+            <div class="mb-3">Clientes cadastrados</div>
+            <div class="mb-3">
+                <a href="/customer">
+                    <small>Ver</small>
+                </a>
+            </div>
+        </div>
+        <div class="col-4 text-center">
+            <h2 class="sale-counter">0</h2>
+            <div class="mb-3">Vendas realizadas</div>
+            <div class="mb-3">
+                <a href="/sales-history">
+                    <small>Ver</small>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="row">
+        <div class="col-md-4">
+            <h5 class="text-secondary">Produtos a vencer:</h5>
+            <table class="table table-sm table-striped">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Produto</th>
+                        <th>Situação</th>
+                    </tr>
+                </thead>
+                <tbody class="expiring-products-list">
+                    <tr>
+                        <td colspan="3">Aguarde...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-4">
+            <h5 class="text-secondary">Clientes em atraso:</h5>
+            <table class="table table-sm table-striped">
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Débito</th>
+                        <th>Desde</th>
+                    </tr>
+                </thead>
+                <tbody class="overdue-customer-list">
+                    <tr>
+                        <td colspan="3">Aguarde...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-4">
+            <h5 class="text-secondary">Contas a receber:</h5>
+            <table class="table table-sm table-striped">
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Valor</th>
+                        <th>Data</th>
+                    </tr>
+                </thead>
+                <tbody class="future-income-list">
+                    <tr>
+                        <td colspan="3">Aguarde...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<script src="/js/dashboard.js"></script>

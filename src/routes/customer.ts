@@ -3,9 +3,13 @@ import { Router, Request, Response, NextFunction } from "express";
 import CustomerService from "../services/CustomerService";
 import Customer from '../models/Customer';
 import CustomerListViewModel from '../models/CustomerListViewModel';
+import { createCustomerViewModel } from '../models/CustomerViewModel';
+import { checkAuthToken } from '../middlewares/session-check';
 
 const service = new CustomerService();
 const router = Router();
+
+router.use(checkAuthToken);
 
 router.get('/', async (req, res, next) => {
   try {
@@ -17,7 +21,35 @@ router.get('/', async (req, res, next) => {
 
     const viewModel = new CustomerListViewModel(customers);
 
-    res.render('customer-list', { title: 'Figaro - Clientes', ...viewModel });
+    viewModel.title = 'Figaro - Clientes';
+    viewModel.setActiveMenu('/customer');
+
+    res.render('customer-list', viewModel);
+  } catch (err) {
+    next(createError(500, err));
+  }
+});
+
+router.get('/search', async (req, res, next) => {
+  try {
+    req.query.q
+    const customers = await service.searchAsync(req.query.q);
+    const viewModel = new CustomerListViewModel(customers);
+    res.json(viewModel.customers);
+  } catch (err) {
+    next(createError(500, err));
+  }
+});
+
+router.get('/:id(\\d+)', async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+
+    const customer = await service.getByIdAsync(id);
+
+    const viewModel = createCustomerViewModel(customer);
+
+    res.json(viewModel);
   } catch (err) {
     next(createError(500, err));
   }
@@ -34,6 +66,39 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
     await service.createAsync(customer);
 
     res.status(201).send();
+  } catch (err) {
+    next(createError(500, err));
+  }
+});
+
+router.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = Number(req.params.id);
+    const customer = validateCustomerFromRequestBody(req.body);
+
+    if (customer == null) {
+      return next(createError(400, new Error('Informações inválidas.')))
+    }
+
+    // remover campos que não podem ser alterados
+    delete customer.id;
+    delete customer.dateCreated;
+
+    await service.updateWithIdAsync(id, customer);
+
+    res.send('OK');
+  } catch (err) {
+    next(createError(500, err));
+  }
+});
+
+router.delete('/:id', async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+
+    const customer = await service.removeAsync(id);
+
+    res.send('OK');
   } catch (err) {
     next(createError(500, err));
   }

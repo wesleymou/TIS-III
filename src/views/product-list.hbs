@@ -20,8 +20,8 @@
                 </div>
             </div>
             <div class="col-3">
-                <button class="btn btn-success" title="Cadastrar cliente" data-toggle="modal"
-                    data-target="#modal-create-product">Adicionar</button>
+                <button class="btn btn-success btn-open-create-modal">
+                    Cadastrar novo produto</button>
             </div>
         </div>
     </div>
@@ -33,26 +33,35 @@
             <thead class="thead-light">
                 <tr>
                     <th>#</th>
-                    <th>Código</th>
                     <th>Nome</th>
                     <th>Descrição</th>
-                    <th>Valor</th>
-                    <th>Data cadastro</th>
-                    <th>Data de validade</th>
                     <th>Quant. disp.</th>
+                    <th>Ação</th>
                 </tr>
             </thead>
             <tbody>
+
+                {{#unless products.length }}
+                <td colspan="8">
+                    Nenhuma produto cadastrado ainda.
+                    Clique no botão acima para cadastrar um produto.
+                </td>
+                {{/unless}}
+
                 {{#each products}}
                 <tr>
-                    <td><a href="/products/{{id}}">{{id}}</a></td>
-                    <td>{{code}}</td>
+                    <td>{{id}}</td>
                     <td>{{name}}</td>
                     <td>{{description}}</td>
-                    <td>{{priceFormat}}</td>
-                    <td>{{dateCreatedFormat}}</td>
-                    <td>{{expirationDateFormat}}</td>
                     <td>{{quantityAvailable}}</td>
+                    <td>
+                        <a class="text-warning table-action" href="/product/view/{{id}}" title="Ver estoque">
+                            <i class="oi oi-list" data-id="{{id}}"></i></a>
+                        <i class="oi oi-pencil text-primary table-action edit-action" data-id="{{id}}"
+                            title="Editar produto"></i>
+                        <i class="oi oi-trash text-danger table-action remove-action" data-id="{{id}}"
+                            title="Excluir produto"></i>
+                    </td>
                 </tr>
                 {{/each }}
             </tbody>
@@ -66,28 +75,15 @@
             <div class="modal-body">
                 <h2>Cadastrar produto</h2>
                 <p class="text-secondary">
-                    Insira as informações do novo produto e clique em Enviar
+                    Insira as informações do produto e clique no botão "Salvar"
                 </p>
                 <form class="my-3">
                     <div class="row">
                         <div class="col-12">
                             <div class="form-group">
-                                <label for="productNameFormInput">Nome</label>
+                                <label for="productNameFormInput">Nome do produto</label>
                                 <input type="text" class="form-control" id="productNameFormInput"
                                     placeholder="Creme de barbear" required>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label for="codeFormInput">Código</label>
-                                <input type="number" class="form-control" id="codeFormInput" placeholder="0042"
-                                    required>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label for="priceFormInput">Preço por unidade</label>
-                                <input type="number" class="form-control" id="priceFormInput" placeholder="">
                             </div>
                         </div>
                         <div class="col-12">
@@ -96,30 +92,13 @@
                                 <textarea class="form-control" id="descriptionFormInput"></textarea>
                             </div>
                         </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="quantityFormInput">Quantidade Disponível</label>
-                                <input type="number" class="form-control" id="quantityFormInput" placeholder="">
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="expirationFormInput">Data de validade</label>
-                                <input type="date" class="form-control" id="expirationFormInput">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="check-non-expiration">
-                                    <label class="form-check-label" for="check-non-expiration">
-                                        Não possui validade
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
                     </div>
+                    <input type="hidden" id="idFormInput" name="idFormInput">
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn mr-2 text-primary">Cancelar</button>
-                <button type="button" id="btn-create" class="btn btn-success">Enviar</button>
+                <button type="button" id="btn-create" class="btn btn-success">Salvar</button>
             </div>
         </div>
     </div>

@@ -11,3 +11,5 @@ export function createCustomerViewModel(customer: Customer): CustomerViewModel {
     dateCreatedFormat: DateTimeUtil.formatDateTime(customer.dateCreated)
   }
 };
+
+export default CustomerViewModel;
