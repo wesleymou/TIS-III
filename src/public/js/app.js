@@ -110,3 +110,25 @@ function confirmDialog(message, onConfirm) {
   });
   n.show();
 }
+
+/**
+ * Formata um número para o tipo moeda (Real) na cultura pt-br
+ * @param {number} num Valor a ser formatado
+ */
+function formatMoney(num) {
+  return Number(num).toLocaleString('pt-br', {
+    style: 'currency',
+    currency: 'BRL'
+  });
+}
+
+/**
+ * Formata um numero na cultura pt-br
+ * @param {number} num Valor a ser formatado
+ */
+function formatNumber(num, decimalPoints) {
+  return (Number(num) || 0)
+    .toLocaleString('pt-br', {
+      maximumFractionDigits: decimalPoints
+    })
+}

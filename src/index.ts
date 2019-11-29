@@ -17,6 +17,7 @@ import connectRedis from 'connect-redis';
 dotenv.config();
 
 import indexRouter from './routes/index';
+import dashboardRouter from './routes/dashboard';
 import productRouter from './routes/product';
 import customerRouter from './routes/customer';
 import userRouter from './routes/user';
@@ -68,6 +69,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(publicDir));
 
 app.use('/', indexRouter);
+app.use('/dashboard', dashboardRouter);
 app.use('/product', productRouter);
 app.use('/customer', customerRouter);
 app.use('/user', userRouter);
