@@ -10,17 +10,15 @@ $(function () {
   $(".products-detail-action").click(function () {
     $.get(`/sales-history/sale-items/${$(this).data("id")}`).then(res => {
       $("#TituloModal").html(res[0].saleId);
-      res.forEach(row => {
-        $("#myModal #modal-table-body").append(`
-          <tr>
-            <td>${row.name}</td>
-            <td>${row.expirationDateFormat}</td>
-            <td>${row.quantity}</td>
-            <td>${row.priceFormat}</td>
-            <td>${row.priceSoldFormat}</td>
-          </tr>
-        `);
-      });
+      $("#myModal #modal-table-body").html(res.map(row => `
+        <tr>
+          <td>${row.name}</td>
+          <td>${row.expirationDateFormat}</td>
+          <td>${row.quantity}</td>
+          <td>${row.priceFormat}</td>
+          <td>${row.priceSoldFormat}</td>
+        </tr>
+      `));
       $("#myModal").modal();
     });
   });
