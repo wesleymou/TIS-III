@@ -35,7 +35,7 @@ function loadExpiringProducts() {
       } else {
         $list.html(`
           <tr>
-            <td>Nenhum produto prestes a expirar.</td>
+            <td colspan="3">Nenhum produto prestes a expirar.</td>
           </tr>
         `);
       }
@@ -58,7 +58,7 @@ function loadOverdueCustomerList() {
       } else {
         $list.html(`
           <tr>
-            <td>Todos os clientes estão em dia!</td>
+            <td colspan="3">Todos os clientes estão em dia!</td>
           </tr>
         `);
       }
@@ -81,7 +81,7 @@ function loadFutureIncomeList() {
       } else {
         $list.html(`
           <tr>
-            <td>Todos os clientes estão em dia!</td>
+            <td colspan="3">Nenhum registro encontrado.</td>
           </tr>
         `);
       }
