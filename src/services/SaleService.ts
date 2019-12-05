@@ -64,6 +64,7 @@ class SaleService implements CrudAsync<Sale> {
         } else {
           reject(error);
         }
+        connection.end();
       });
     });
   }
@@ -147,7 +148,7 @@ class SaleService implements CrudAsync<Sale> {
     UPDATE sale s
     SET s.sale_status_id=2
     WHERE s.id=${id} AND s.sale_status_id!=2;`;
-    
+
     return new Promise((resolve, rejects) => {
       Database.query(sql, (err, res) => {
         if (!err) resolve(res);
