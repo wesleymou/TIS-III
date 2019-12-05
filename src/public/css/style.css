@@ -25,6 +25,18 @@ body, html {
     width: var(--sidebar-width);
 }
 
+.sidebar-logo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sidebar-toggle {
+    display: none;
+    font-size: 14px;
+    padding: 14px;
+}
+
 .sidebar-logo .app-name {
     font-size: 18px;
 }
@@ -66,4 +78,30 @@ body, html {
 .table-action {
     padding: 8px;
     cursor: pointer;
+}
+
+@media (max-width: 992px) {
+    .sidebar-toggle {
+        display: block;
+    }
+
+    .sidebar {
+        z-index: 1;
+        height: 100%;
+        position: fixed;
+        left: calc(0px - var(--sidebar-width));
+        transition: left 0.2s ease-in-out;
+    }
+    
+    .sidebar.active {
+        left: 0;
+        box-shadow: 1px 1px 6px rgba(0,0,0,0.15);
+    }
+
+    .sidebar:not(.active) .sidebar-toggle {
+        position: absolute;
+        width: 100px;
+        left: calc(10px + var(--sidebar-width));
+        top: 0;
+    }
 }

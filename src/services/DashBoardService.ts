@@ -36,15 +36,18 @@ export default class DashboardService {
         `;
 
         return new Promise((resolve, reject) => {
-            multipleStatementConnection()
-                .query(sql, (error, results: any[]) => {
-                    if (error) {
-                        reject(error);
-                    } else {
-                        const [result] = results[results.length - 1];
-                        resolve(result)
-                    }
-                })
+            const connection = multipleStatementConnection();
+
+            connection.query(sql, (error, results: any[]) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    const [result] = results[results.length - 1];
+                    resolve(result);
+                }
+
+                connection.end();
+            });
         });
     }
 

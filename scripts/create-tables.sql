@@ -50,6 +50,14 @@ CREATE TABLE user (
 	CONSTRAINT user_PK PRIMARY KEY (id)
 );
 
+-- Cria tabela de situação de venda
+CREATE TABLE sale_status (
+	id int NOT NULL AUTO_INCREMENT,
+	name varchar(255) NOT NULL,
+	description varchar(255) NOT NULL,
+	CONSTRAINT sale_status_PK PRIMARY KEY (id)
+);
+
 -- Cria tabela de vendas
 CREATE TABLE sale (
 	id int NOT NULL AUTO_INCREMENT,
@@ -61,9 +69,9 @@ CREATE TABLE sale (
 	date_updated DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	payment_date DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	payment_method_id INT NOT NULL,
-	sale_status INT NOT NULL,
+	sale_status_id INT NOT NULL,
 	CONSTRAINT sale_PK PRIMARY KEY (id),
-	CONSTRAINT sale_sale_status_FK FOREIGN KEY (sale_status) REFERENCES sale_status(id),
+	CONSTRAINT sale_sale_status_FK FOREIGN KEY (sale_status_id) REFERENCES sale_status(id),
 	CONSTRAINT sale_user_FK FOREIGN KEY (user_id) REFERENCES `user`(id),
 	CONSTRAINT sale_customer_FK FOREIGN KEY (customer_id) REFERENCES customer(id)
 );

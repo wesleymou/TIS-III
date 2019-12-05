@@ -1,4 +1,18 @@
 $(function () {
+
+  $('.sidebar-toggle').click(function () {
+    var $sidebar = $('.sidebar');
+    var $button = $(this);
+
+    if ($sidebar.is('.active')) {
+      $sidebar.removeClass('active');
+      $button.html('<i class="oi oi-menu"></i> menu')
+    } else {
+      $sidebar.addClass('active');
+      $button.html('<i class="oi oi-x"></i>')
+    }
+  })
+
   $.extend($.fn.dataTable.defaults, {
     searching: false,
     language: {

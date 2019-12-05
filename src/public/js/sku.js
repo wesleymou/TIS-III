@@ -18,8 +18,9 @@ $(function () {
    */
   var searchParams = new URLSearchParams(window.location.search);
 
-
-  $('#tabelaProdutos').DataTable();
+  if ($('#tabelaProdutos [data-id]').length) {
+    $('#tabelaProdutos').DataTable();
+  }
 
   // Foca o usuário no input de pesquisa ao iniciar a tela
   $('#query-input').focus();
