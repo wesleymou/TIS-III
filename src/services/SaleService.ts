@@ -2,8 +2,6 @@ import CrudAsync from "../models/CrudAsync";
 import Sale from "../models/Sale";
 import Database, { multipleStatementConnection } from "./Database";
 import SaleDetail from "../models/SaleDetail";
-import { resolve } from "dns";
-import { rejects } from "assert";
 import DateTimeUtil from "../utils/DateTimeUtil";
 
 class SaleService implements CrudAsync<Sale> {
@@ -21,12 +19,8 @@ class SaleService implements CrudAsync<Sale> {
       )
       .join("");
 
-    const paymentDateParts = (sale.paymentDate || new Date())
-      .toLocaleDateString()
-      .split("/");
-
-    const [month, date, year] = paymentDateParts;
-    const paymentDate = [year, month, date].join("-");
+    const isoDate = (sale.paymentDate || new Date()).toISOString();
+    const paymentDate = isoDate.slice(0, isoDate.indexOf('T'));
 
     const sql = `
       insert into sale (
