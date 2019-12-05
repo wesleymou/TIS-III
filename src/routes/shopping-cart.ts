@@ -117,17 +117,11 @@ async function validateSale(obj: any): Promise<Sale> {
     })
   );
 
-  sale.totalPrice = sale.items.reduce(
-    (total, item) => item.priceSold * item.quantity + total,
-    0
-  );
+  sale.totalPrice = sale.items
+    .reduce((total, item) => item.priceSold * item.quantity + total, 0);
 
-  if (paymentDate) {
-    const [year, month, day] = paymentDate.split('-');
-    sale.paymentDate = new Date(Number(year), Number(month) - 1, Number(day));
-  } else {
-    sale.paymentDate = new Date();
-  }
+  // Deve receber no formato ISO
+  sale.paymentDate = new Date(paymentDate || Date.now());
 
   if (sale.paymentDate.valueOf() > Date.now()) {
     sale.saleStatus = 1 // pendente

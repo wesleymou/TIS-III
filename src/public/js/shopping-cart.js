@@ -196,7 +196,17 @@ function getSaleInfo() {
     return { price, quantity, skuId };
   }).get();
 
-  const paymentDate = $('#paymentDate').val();
+  const paymentDateVal = $('#paymentDate').val();
+
+  let paymentDate;
+
+  if (paymentDateVal) {
+    const [year, month, day] = paymentDateVal.split('-').map(Number);
+    paymentDate = new Date(year, month - 1, day).toISOString();
+  } else {
+    paymentDate = new Date().toISOString();
+  }
+
   const paymentMethodId = Number($('#paymentMethod').val());
   const customerId = Number($('#customerId').val());
 
