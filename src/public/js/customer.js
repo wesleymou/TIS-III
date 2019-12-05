@@ -1,5 +1,7 @@
 $(function () {
-  $('#tabelaClientes').DataTable();
+  if ($('#tabelaClientes [data-id]').length) {
+    $('#tabelaClientes').DataTable();
+  }
 
   /**
    * Itens pesquisados na query string
