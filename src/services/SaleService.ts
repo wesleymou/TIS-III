@@ -2,8 +2,6 @@ import CrudAsync from "../models/CrudAsync";
 import Sale from "../models/Sale";
 import Database, { multipleStatementConnection } from "./Database";
 import SaleDetail from "../models/SaleDetail";
-import { resolve } from "dns";
-import { rejects } from "assert";
 import DateTimeUtil from "../utils/DateTimeUtil";
 
 class SaleService implements CrudAsync<Sale> {
@@ -21,12 +19,8 @@ class SaleService implements CrudAsync<Sale> {
       )
       .join("");
 
-    const paymentDateParts = (sale.paymentDate || new Date())
-      .toLocaleDateString()
-      .split("/");
-
-    const [month, date, year] = paymentDateParts;
-    const paymentDate = [year, month, date].join("-");
+    const isoDate = (sale.paymentDate || new Date()).toISOString();
+    const paymentDate = isoDate.slice(0, isoDate.indexOf('T'));
 
     const sql = `
       insert into sale (
@@ -64,6 +58,7 @@ class SaleService implements CrudAsync<Sale> {
         } else {
           reject(error);
         }
+        connection.end();
       });
     });
   }
@@ -147,7 +142,7 @@ class SaleService implements CrudAsync<Sale> {
     UPDATE sale s
     SET s.sale_status_id=2
     WHERE s.id=${id} AND s.sale_status_id!=2;`;
-    
+
     return new Promise((resolve, rejects) => {
       Database.query(sql, (err, res) => {
         if (!err) resolve(res);

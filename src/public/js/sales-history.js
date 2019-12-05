@@ -1,29 +1,29 @@
-$(function() {
-  $("#tabelaVendas").dataTable();
+$(function () {
+  if ($('#tabelaVendas [data-id]').length) {
+    $("#tabelaVendas").dataTable();
+  }
 
-  $(function() {
+  $(function () {
     $('[data-toggle="popover"]').popover();
   });
 
-  $(".products-detail-action").click(function() {
+  $(".products-detail-action").click(function () {
     $.get(`/sales-history/sale-items/${$(this).data("id")}`).then(res => {
       $("#TituloModal").html(res[0].saleId);
-      res.forEach(row => {
-        $("#myModal #modal-table-body").append(`
-          <tr>
-            <td>${row.name}</td>
-            <td>${row.expirationDateFormat}</td>
-            <td>${row.quantity}</td>
-            <td>${row.priceFormat}</td>
-            <td>${row.priceSoldFormat}</td>
-          </tr>
-        `);
-      });
+      $("#myModal #modal-table-body").html(res.map(row => `
+        <tr>
+          <td>${row.name}</td>
+          <td>${row.expirationDateFormat}</td>
+          <td>${row.quantity}</td>
+          <td>${row.priceFormat}</td>
+          <td>${row.priceSoldFormat}</td>
+        </tr>
+      `));
       $("#myModal").modal();
     });
   });
 
-  $(document).on("click", "#edit-action", function() {
+  $(document).on("click", "#edit-action", function () {
     if ($(this).data("status") == 2) {
       noty("Não é possível alterar vendas canceladas");
     } else {
@@ -60,7 +60,7 @@ $(function() {
     }
   });
 
-  $("#input-customer, #input-status, #input-payment").click(function() {
+  $("#input-customer, #input-status, #input-payment").click(function () {
     const key = $(this).data("key");
     if (key == "customer") {
       $.get("/sales-history/get-customer").then(res => {
@@ -80,7 +80,7 @@ $(function() {
     }
   });
 
-  $("#pop-up-save").click(function() {
+  $("#pop-up-save").click(function () {
     confirmDialog("Tem certeza que deseja salvar essas alterações?", () => {
       const sale = $("#modal-edit #TituloModal").data("sale");
 
@@ -106,7 +106,7 @@ $(function() {
     });
   });
 
-  $(document).on("click", "#confirm-action", function() {
+  $(document).on("click", "#confirm-action", function () {
     if ($(this).data("status") == 2) {
       noty("Não é possível alterar vendas canceladas");
     } else {
@@ -127,7 +127,7 @@ $(function() {
     }
   });
 
-  $(document).on("click", "#cancel-action", function() {
+  $(document).on("click", "#cancel-action", function () {
     if ($(this).data("status") == 2) {
       noty("Não é possível alterar vendas canceladas");
     } else {
@@ -192,7 +192,7 @@ function preencherModalPopUp(head, body) {
       // searching: true
     });
 
-  $(".pop-up-action").click(function() {
+  $(".pop-up-action").click(function () {
     alterarDados($(this).data("id"), $(this).data("key"), $(this).html());
   });
 }

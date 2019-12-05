@@ -54,10 +54,16 @@ router.post("/", async (req, res, next) => {
 router.get("/:query", async (req, res, next) => {
   try {
     const { query } = req.params;
-    let products: SKU[] = query
+
+    const products: SKU[] = query
       ? await skuService.searchProductAsync(query)
       : [];
-    const viewModel = new ProductListViewModel(products);
+
+    // não mostrar produtos vencidos
+    const viableProducts = products
+      .filter(p => !p.expirationDate || p.expirationDate.valueOf() > Date.now());
+
+    const viewModel = new ProductListViewModel(viableProducts);
     res.json(viewModel);
   } catch (err) {
     next(createError(500, err));
@@ -117,17 +123,11 @@ async function validateSale(obj: any): Promise<Sale> {
     })
   );
 
-  sale.totalPrice = sale.items.reduce(
-    (total, item) => item.priceSold * item.quantity + total,
-    0
-  );
+  sale.totalPrice = sale.items
+    .reduce((total, item) => item.priceSold * item.quantity + total, 0);
 
-  if (paymentDate) {
-    const [year, month, day] = paymentDate.split('-');
-    sale.paymentDate = new Date(Number(year), Number(month) - 1, Number(day));
-  } else {
-    sale.paymentDate = new Date();
-  }
+  // Deve receber no formato ISO
+  sale.paymentDate = new Date(paymentDate || Date.now());
 
   if (sale.paymentDate.valueOf() > Date.now()) {
     sale.saleStatus = 1 // pendente
